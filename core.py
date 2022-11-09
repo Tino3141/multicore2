@@ -7,14 +7,6 @@ from mesi import MESI
 
 FLUSH_TIME = 99
 class Core:
-
-    wait_until                   = 0  # if the processor should block we set this value to the cycle number until the core should block
-    non_load_and_store_cycle_cnt = 0
-    idle_cylce_cnt               = 0
-    cache_shared_hit_cnt         = 0
-    cache_exclusive_hit_cnt      = 0
-    # cache                        = Cache()
-
     def __init__(self, instrStream, block, associativity, cache_size, check_state=lambda x, y: [], core_id=0, cores_cnt=4) -> None:
         self.instr_stream = deque(instrStream)
         self.flush_queue = deque()
@@ -31,7 +23,6 @@ class Core:
         self.cache_idle_count = 0
         self.shared_access = 0
         self.private_access = 0
-
     
     def add_wait(self, wait_time):
         self.wait_counter += wait_time
@@ -96,14 +87,10 @@ class Core:
                         self.bus_read_input[addr] = True
                     return bus_output
             
-            # Think about that again
-            
             # Del Key from BusReadInput
             if addr in self.bus_read_input.keys():             
                 del self.bus_read_input[addr]
-            # perform instruction
 
-            # increase idle count
             self.cache_idle_count += 1
             if (self.cache.update_cache(addr)):
                 self.cache_idle_count -= 1  # in case of the cache is done fetching or it is a cache hit, cache is not ideling
@@ -114,10 +101,7 @@ class Core:
                     self.shared_access += 1
                 elif access_state == MESI_STATES.Exclusive or access_state == MESI_STATES.Modified:
                     self.private_access += 1
-
                 self.cache.update_state(addr, MESI_ACTIONS.PrRd, someone_has_copy=someone_has_copy)
-
-                
                 self.instr_stream.popleft()
                 self.load_store_instr_count += 1
         # Instr Write Case
@@ -154,9 +138,7 @@ class Core:
                 flush_addr, mesi_action = self.flush_queue.popleft()
                 self.dec_wait()           
                 self.cache.update_state(flush_addr, mesi_action)
-                # bus_output.append(BusMESIInput(MESI_ACTIONS.HAVE_ADDRESS, self.core_id, flush_addr))
         else:
             raise "Core cannot process instruction type " + str(instr_type)
-        # return anything that needs to be put on the bus
         return bus_output
  
