@@ -1,5 +1,4 @@
-from definitions import MESI_STATES
-from definitions import MESI_ACTIONS
+from definitions import MESI_STATES, MESI_ACTIONS
 
 class MESI:
 

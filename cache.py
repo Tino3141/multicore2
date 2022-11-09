@@ -1,14 +1,15 @@
 import math
 from collections import deque
-from definitions import MESI_ACTIONS, MESI_STATES
+from definitions import PROTOCOL_ACTIONS, PROTOCOL_STATES
 from mesi import MESI
+from dragon import Dragon
 
 EVICTION_WAIT = 99
 FETCH_WAIT = 99
 
 class Cache:
-    def __init__(self, block, associativity, cache_size) -> None:
-        
+    def __init__(self, block, associativity, cache_size, IS_MESI=True) -> None:
+        self.IS_MESI = IS_MESI
         self.block = block
         self.associativity = associativity
         self.cache_size = cache_size
@@ -29,7 +30,7 @@ class Cache:
         return int(block_number / self.rows)
 
     def cache_hit(self, state, computed_tag, block_tag):
-        return (computed_tag == block_tag) and (state.current_state!=MESI_STATES.Invalid) 
+        return (computed_tag == block_tag) and (state.current_state!=PROTOCOL_STATES.Invalid) 
 
     def add_wait(self, wait) -> int:
         self.wait_counter += wait
@@ -57,7 +58,7 @@ class Cache:
                 return False
             # we need to add to cache
             else:
-                cache_entry = (MESI(), tag)
+                cache_entry = (MESI() if self.IS_MESI else Dragon(), tag)
                 queue.append(cache_entry)
                 self.decrement_wait()
                 return True
@@ -83,7 +84,7 @@ class Cache:
             return False
 
     # return: The current state of the cached address. If address not in cache -> return Invalid State
-    def get_state(self, address) -> MESI_STATES:
+    def get_state(self, address) -> PROTOCOL_STATES:
         index = self.compute_index(address)
         tag = self.compute_tag(address)
         queue = self.indexes[index]
@@ -92,7 +93,7 @@ class Cache:
             if block_tag == tag:  
                 return state.current_state
         
-        return MESI_STATES.Invalid
+        return PROTOCOL_STATES.Invalid
 
     def update_state(self, address, bus_action, someone_has_copy=True):
         index = self.compute_index(address)
@@ -103,4 +104,4 @@ class Cache:
             if block_tag == tag:  
                 return state.step(bus_action, someone_has_copy=someone_has_copy)
         
-        return MESI_ACTIONS.No_Action
+        return PROTOCOL_ACTIONS.No_Action
