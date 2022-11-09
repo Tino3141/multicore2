@@ -5,9 +5,6 @@ from bus import Bus, BusMESIInput
 from definitions import MESI_STATES
 
 class Computer:
-
-    bytes_on_bus                    = 0
-    invalidations_or_updates_on_bus = 0
     
     def __init__(self, instr, block=16, associativity=1, cache_size=1024, number_cores=4) -> None:
 
@@ -28,8 +25,6 @@ class Computer:
         bus_actions = list['BusMESIInput']()
         for core in self.cores:
             potential_input = core.step(bus_transaction)
-            # todo potential_input is now a list not single instance. 
-            # need to handle
             for input in potential_input:
                 bus_actions.append(input)
         return bus_actions
@@ -84,13 +79,7 @@ class Computer:
             logging.info(f"Core {core.core_id} access distribution (shared / private): {access_distribution}")
 
         logging.info("Logging complete!")
-        
-
-        
-
-        
-
-    
+   
     # core is asking core, not searching core
     def check_state(self, addr, core):
         core_states = []

@@ -28,9 +28,8 @@ class Cache:
         block_number = int(address / self.offset)
         return int(block_number / self.rows)
 
-    # TODO: Update validity when protocol implemented
     def cache_hit(self, state, computed_tag, block_tag):
-        return (computed_tag == block_tag)and (state.current_state!=MESI_STATES.Invalid) 
+        return (computed_tag == block_tag) and (state.current_state!=MESI_STATES.Invalid) 
 
     def add_wait(self, wait) -> int:
         self.wait_counter += wait
