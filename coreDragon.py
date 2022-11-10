@@ -96,6 +96,7 @@ class CoreDragon(Core):
                     # Create new BusTransaction
                     self.bus_read_input[addr] = True
                     bus_output.append(BusProtocolInput(DRAGON_ACTIONS.BusUpd, self.core_id, addr))
+                    return bus_output
             if self.cache.update_cache(addr):
                 # access analysis
                 access_state = self.cache.get_state(addr)
