@@ -1,11 +1,11 @@
 from bus import BusProtocolInput
 from definitions import DRAGON_ACTIONS, DRAGON_STATES, FLUSH_TIME
 from core import Core
-
+from cache import Cache
 class CoreDragon(Core):
-    def __init__(self, instrStream, block, associativity, cache_size, check_state=..., core_id=0, cores_cnt=4, check_flush=lambda addr, core_id: False, flush_directory={}) -> None:
+    def __init__(self, instrStream, block, associativity, cache_size, check_state=lambda x, y: [], core_id=0, cores_cnt=4, check_flush=lambda addr, core_id: False, flush_directory={}) -> None:
         super().__init__(instrStream, block, associativity, cache_size, check_state, core_id, cores_cnt, check_flush=check_flush, flush_directory=flush_directory)
-
+        self.cache = Cache(block, associativity, cache_size, IS_MESI=False)
     def step(self, bus_transaction: BusProtocolInput):
         bus_output = []
 
@@ -45,15 +45,17 @@ class CoreDragon(Core):
                     someone_has_copy = True
                 if state == DRAGON_STATES.SharedModified or state == DRAGON_STATES.Modified:
                     if addr not in self.bus_read_input.keys():
-                        bus_output.append(BusProtocolInput(DRAGON_ACTIONS.BusRd, self.core_id))
+                        bus_output.append(BusProtocolInput(DRAGON_ACTIONS.BusRd, self.core_id, addr))
                         return bus_output
                 # check if the flush state didn't change for others. then
+            
+            self.cache_idle_count += 1
+
             if self.check_flush(addr, self.core_id):
                 return bus_output
             if addr in self.bus_read_input.keys():
                 del self.bus_read_input[addr]
 
-            self.cache_idle_count += 1
 
             if (self.cache.update_cache(addr)):
                 self.cache_idle_count -= 1
@@ -65,10 +67,13 @@ class CoreDragon(Core):
                     self.private_access += 1
                 
                 if access_state == DRAGON_STATES.Invalid:
-                    self.cache.update_state(addr, DRAGON_ACTIONS.PrRdMiss, someone_has_copy=someone_has_copy)
+                    bus_action = self.cache.update_state(addr, DRAGON_ACTIONS.PrRdMiss, someone_has_copy=someone_has_copy)
+                    bus_output.append(BusProtocolInput(bus_action, self.core_id, addr))
+
                 else:
-                    self.cache.update_state(addr, DRAGON_ACTIONS.PrRd, someone_has_copy=someone_has_copy)
-                
+                    bus_action = self.cache.update_state(addr, DRAGON_ACTIONS.PrRd, someone_has_copy=someone_has_copy)
+                    bus_output.append(BusProtocolInput(bus_action, self.core_id, addr))
+                    
                 self.instr_stream.popleft()
                 self.load_store_instr_count += 1
         # Inst Write Case
@@ -84,11 +89,13 @@ class CoreDragon(Core):
                 
                 # WriteMiss
                 if access_state == DRAGON_STATES.Invalid:
-                    self.cache.update_state(addr, DRAGON_ACTIONS.PrWrMiss, someone_has_copy=someone_has_copy)
+                    # TODO put responses on bus
+                    bus_action = self.cache.update_state(addr, DRAGON_ACTIONS.PrWrMiss, someone_has_copy=someone_has_copy)
+                    bus_output.append(BusProtocolInput(bus_action, self.core_id, addr))
                 # ReadMiss
                 else:
-                    self.cache.update_state(addr, DRAGON_ACTIONS.PrWr, someone_has_copy=someone_has_copy)
-
+                    bus_action = self.cache.update_state(addr, DRAGON_ACTIONS.PrWr, someone_has_copy=someone_has_copy)
+                    bus_output.append(BusProtocolInput(bus_action, self.core_id, addr))
                 self.instr_stream.popleft()
                 self.load_store_instr_count += 1
         elif instr_type == 2:

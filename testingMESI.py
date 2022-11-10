@@ -100,7 +100,7 @@ class TestSuite(unittest.TestCase):
 
         self.assertEqual(current_cycle, 106)
 
-    def test_singleCoreMESIFull(self):
+    def test_single_core_MESI_full(self):
         instructions = [
             (1, 0x200001), 
             (2, 0x5),

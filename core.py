@@ -40,7 +40,7 @@ class Core:
             if flush_addr == addr:
                 return
 
-        if self.flush_directory[addr]:
+        if addr in self.flush_directory.keys():
             self.flush_directory[addr].append(self.core_id)
         else:
             self.flush_directory[addr] = [self.core_id]

@@ -96,6 +96,6 @@ class Computer:
     def check_flush(self, addr, core):
         # Check directory if it contains a flush matching the address and from a different core
         # {addr: []}
-        if self.check_flush[addr]:
+        if addr in self.flush_directory.keys() and len(self.flush_directory[addr]) > 0:
             return True
         return False
