@@ -134,7 +134,7 @@ class TestSuite(unittest.TestCase):
         computer = Computer(instructions, number_cores=2, MESI=False)
         computer.start()
 
-       # self.assertEqual(computer.current_cycle, 203)
+        self.assertEqual(computer.current_cycle, 304)
         self.assertEqual(computer.cores[0].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedModified)
         self.assertEqual(computer.cores[1].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedClean)
 

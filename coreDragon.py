@@ -43,10 +43,11 @@ class CoreDragon(Core):
             for _, state in other_cores_states:
                 if state != DRAGON_STATES.Invalid:
                     someone_has_copy = True
-                if state == DRAGON_STATES.SharedModified or state == DRAGON_STATES.Modified:
+                if state == DRAGON_STATES.Modified:
                     if addr not in self.bus_read_input.keys():
                         bus_output.append(BusProtocolInput(DRAGON_ACTIONS.BusRd, self.core_id, addr))
-                        return bus_output
+                        self.bus_read_input[addr] = True
+                    return bus_output
                 # check if the flush state didn't change for others. then
             
             self.cache_idle_count += 1
