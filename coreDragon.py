@@ -27,7 +27,7 @@ class CoreDragon(Core):
         # complete instructions for cycle
         if len(self.instr_stream) == 0:
             self.terminated = True
-            return []
+            return bus_output
         else:
             self.terminated = False
 
@@ -78,7 +78,11 @@ class CoreDragon(Core):
                 self.load_store_instr_count += 1
         # Inst Write Case
         elif instr_type == 1:
-            someone_has_copy = self.check_state(addr, self.core_id)
+            other_cores = self.check_state(addr, self.core_id)
+            someone_has_copy = False
+            for _, state in other_cores:
+                if state != DRAGON_STATES.Invalid:
+                    someone_has_copy = True
             if self.cache.update_cache(addr):
                 # access analysis
                 access_state = self.cache.get_state(addr)
@@ -89,7 +93,7 @@ class CoreDragon(Core):
                 
                 # WriteMiss
                 if access_state == DRAGON_STATES.Invalid:
-                    # TODO put responses on bus
+                   
                     bus_action = self.cache.update_state(addr, DRAGON_ACTIONS.PrWrMiss, someone_has_copy=someone_has_copy)
                     bus_output.append(BusProtocolInput(bus_action, self.core_id, addr))
                 # ReadMiss
