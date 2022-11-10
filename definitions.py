@@ -7,6 +7,7 @@ class MESI_STATES(PROTOCOL_STATES):
     Modified = "Modified"
 
 class DRAGON_STATES(PROTOCOL_STATES):
+    Loaded = "Loaded"
     Exclusive = "Exclusive"
     SharedClean = "SharedClean"
     SharedModified = "SharedModified"
