@@ -27,7 +27,6 @@ class DRAGON_ACTIONS(PROTOCOL_ACTIONS):
     PrRdMiss = 6
     PrWrMiss = 7
     BusUpd = 8
-    AddrUpd = 9
 # Constants
 FLUSH_TIME = 99
 

@@ -3,7 +3,7 @@ from definitions import MESI_ACTIONS, MESI_STATES, FLUSH_TIME
 from core import Core
 
 class CoreMESI(Core):
-    def __init__(self, instrStream, block, associativity, cache_size, check_state=lambda x, y: [], core_id=0, cores_cnt=4) -> None:
+    def __init__(self, instrStream, block, associativity, cache_size, check_state=lambda x, y: [], core_id=0, cores_cnt=4, check_flush=lambda x,y: False) -> None:
         super().__init__(instrStream, block, associativity, cache_size, check_state, core_id, cores_cnt)
 
     def step(self, bus_transaction: BusProtocolInput):

@@ -17,9 +17,9 @@ class Computer:
         # Adding the cores
         for i in range(0, number_cores):
             if MESI:
-                self.cores.append(CoreMESI(instr[i], block, associativity, cache_size, self.check_state, i, cores_cnt=number_cores))
+                self.cores.append(CoreMESI(instr[i], block, associativity, cache_size, self.check_state, i, cores_cnt=number_cores, check_flush=self.check_flush))
             else: 
-                self.cores.append(CoreDragon(instr[i], block, associativity, cache_size, self.check_state, i, cores_cnt=number_cores))
+                self.cores.append(CoreDragon(instr[i], block, associativity, cache_size, self.check_state, i, cores_cnt=number_cores, check_flush=self.check_flush))
 
         # Adding the bus
         self.bus = Bus()
@@ -90,3 +90,10 @@ class Computer:
             if c.core_id != core:
                 core_states.append((c.core_id, c.cache.get_state(addr)))
         return core_states
+    
+    # core is asking core, not searching core
+    def check_flush(self, addr, core):
+        for c in self.cores:
+            if c.core_id != core and len(c.instr_stream) > 0 and c.instr_stream[0][0] == 3 and c.instr_stream[0][1] == addr:
+                return True
+        return False
