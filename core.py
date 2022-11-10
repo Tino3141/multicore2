@@ -7,7 +7,7 @@ from mesi import MESI
 
 
 class Core:
-    def __init__(self, instrStream, block, associativity, cache_size, check_state=lambda x, y: [], core_id=0, cores_cnt=4, check_flush= lambda addr, core_id: False) -> None:
+    def __init__(self, instrStream, block, associativity, cache_size, check_state=lambda x, y: [], core_id=0, cores_cnt=4, check_flush= lambda addr, core_id: False, flush_directory={}) -> None:
         self.instr_stream = deque(instrStream)
         self.flush_queue = deque()
         self.bus_read_input = {}
@@ -24,6 +24,7 @@ class Core:
         self.shared_access = 0
         self.private_access = 0
         self.check_flush = check_flush
+        self.flush_directory = flush_directory
     
     def add_wait(self, wait_time):
         self.wait_counter += wait_time
@@ -38,6 +39,11 @@ class Core:
         for flush_addr, _ in self.flush_queue:
             if flush_addr == addr:
                 return
+
+        if self.flush_directory[addr]:
+            self.flush_directory[addr].append(self.core_id)
+        else:
+            self.flush_directory[addr] = [self.core_id]
         self.instr_stream.insert(1, flush_instr)
         self.flush_queue.append((addr, bus_action))
 

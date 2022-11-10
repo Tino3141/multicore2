@@ -13,6 +13,7 @@ class Computer:
         
         self.cores = []
         self.current_cycle = 0
+        self.flush_directory = {}
         
         # Adding the cores
         for i in range(0, number_cores):
@@ -91,9 +92,10 @@ class Computer:
                 core_states.append((c.core_id, c.cache.get_state(addr)))
         return core_states
     
-    # core is asking core, not searching core
+    # core is asking core, not searching core !Core is no longer required as a parameter!
     def check_flush(self, addr, core):
-        for c in self.cores:
-            if c.core_id != core and len(c.instr_stream) > 0 and c.instr_stream[0][0] == 3 and c.instr_stream[0][1] == addr:
-                return True
+        # Check directory if it contains a flush matching the address and from a different core
+        # {addr: []}
+        if self.check_flush[addr]:
+            return True
         return False

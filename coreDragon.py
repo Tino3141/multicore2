@@ -3,8 +3,8 @@ from definitions import DRAGON_ACTIONS, DRAGON_STATES, FLUSH_TIME
 from core import Core
 
 class CoreDragon(Core):
-    def __init__(self, instrStream, block, associativity, cache_size, check_state=..., core_id=0, cores_cnt=4, check_flush=lambda addr, core_id: False) -> None:
-        super().__init__(instrStream, block, associativity, cache_size, check_state, core_id, cores_cnt, check_flush=check_flush)
+    def __init__(self, instrStream, block, associativity, cache_size, check_state=..., core_id=0, cores_cnt=4, check_flush=lambda addr, core_id: False, flush_directory={}) -> None:
+        super().__init__(instrStream, block, associativity, cache_size, check_state, core_id, cores_cnt, check_flush=check_flush, flush_directory=flush_directory)
 
     def step(self, bus_transaction: BusProtocolInput):
         bus_output = []
@@ -52,10 +52,64 @@ class CoreDragon(Core):
                 return bus_output
             if addr in self.bus_read_input.keys():
                 del self.bus_read_input[addr]
+
+            self.cache_idle_count += 1
+
+            if (self.cache.update_cache(addr)):
+                self.cache_idle_count -= 1
+
+                access_state = self.cache.get_state(addr)
+                if access_state == DRAGON_STATES.SharedClean or access_state == DRAGON_STATES.SharedModified:
+                    self.shared_access += 1
+                elif access_state == DRAGON_STATES.Exclusive or access_state == DRAGON_STATES.Modified:
+                    self.private_access += 1
+                
+                if access_state == DRAGON_STATES.Invalid:
+                    self.cache.update_state(addr, DRAGON_ACTIONS.PrRdMiss, someone_has_copy=someone_has_copy)
+                else:
+                    self.cache.update_state(addr, DRAGON_ACTIONS.PrRd, someone_has_copy=someone_has_copy)
+                
+                self.instr_stream.popleft()
+                self.load_store_instr_count += 1
+        # Inst Write Case
         elif instr_type == 1:
-            pass
+            someone_has_copy = self.check_state(addr, self.core_id)
+            if self.cache.update_cache(addr):
+                # access analysis
+                access_state = self.cache.get_state(addr)
+                if access_state == DRAGON_STATES.SharedClean or access_state == DRAGON_STATES.SharedModified:
+                    self.shared_access += 1
+                elif access_state == DRAGON_STATES.Exclusive or access_state == DRAGON_STATES.Modified:
+                    self.private_access += 1
+                
+                # WriteMiss
+                if access_state == DRAGON_STATES.Invalid:
+                    self.cache.update_state(addr, DRAGON_ACTIONS.PrWrMiss, someone_has_copy=someone_has_copy)
+                # ReadMiss
+                else:
+                    self.cache.update_state(addr, DRAGON_ACTIONS.PrWr, someone_has_copy=someone_has_copy)
+
+                self.instr_stream.popleft()
+                self.load_store_instr_count += 1
         elif instr_type == 2:
-            pass
+            if self.wait_counter == -1:
+                self.add_wait(addr) # Addr adds wait time for type 2 instructions (naming issue)
+            elif self.wait_counter > 0:
+                self.dec_wait()
+            if self.wait_counter == 0: # Counter is 0 i.e. continue
+                _ , cycles = self.instr_stream.popleft()
+                self.compute_cycle_count += cycles
+                self.dec_wait()
         elif instr_type == 3:
-            pass
+            if self.wait_counter == -1:
+                self.add_wait(FLUSH_TIME) # Addr adds wait time for type 2 instructions (naming issue)
+            elif self.wait_counter > 0:
+                self.dec_wait()
+            if self.wait_counter == 0: # Counter is 0 i.e. continue
+                self.instr_stream.popleft()
+                self.flush_directory[addr].remove(self.core_id)
+                flush_addr, mesi_action = self.flush_queue.popleft()
+                self.dec_wait()           
+                self.cache.update_state(flush_addr, mesi_action)
+            
         return bus_output
