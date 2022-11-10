@@ -37,17 +37,17 @@ class CoreDragon(Core):
 
         # Instr Read Case
         if instr_type == 0:
-            other_cores_states = self.check_state(addr, self.core_id)
-            someone_has_copy = False
+            # other_cores_states = self.check_state(addr, self.core_id)
+            # someone_has_copy = False
             
-            for _, state in other_cores_states:
-                if state != DRAGON_STATES.Invalid:
-                    someone_has_copy = True
-                if state == DRAGON_STATES.Modified or state == DRAGON_STATES.Exclusive:
-                    if addr not in self.bus_read_input.keys():
-                        bus_output.append(BusProtocolInput(DRAGON_ACTIONS.BusRd, self.core_id, addr))
-                        self.bus_read_input[addr] = True
-                    return bus_output
+            # for _, state in other_cores_states:
+            #     if state != DRAGON_STATES.Invalid:
+            #         someone_has_copy = True
+            #     if state == DRAGON_STATES.Modified or state == DRAGON_STATES.Exclusive:
+            #         if addr not in self.bus_read_input.keys():
+            #             bus_output.append(BusProtocolInput(DRAGON_ACTIONS.BusRd, self.core_id, addr))
+            #             self.bus_read_input[addr] = True
+            #         return bus_output
                 # check if the flush state didn't change for others. then
             
             self.cache_idle_count += 1
@@ -60,6 +60,18 @@ class CoreDragon(Core):
 
             if (self.cache.update_cache(addr)):
                 self.cache_idle_count -= 1
+
+                other_cores_states = self.check_state(addr, self.core_id)
+                someone_has_copy = False
+                
+                for _, state in other_cores_states:
+                    if state != DRAGON_STATES.Invalid:
+                        someone_has_copy = True
+                    if state == DRAGON_STATES.Modified or state == DRAGON_STATES.Exclusive:
+                        if addr not in self.bus_read_input.keys():
+                            bus_output.append(BusProtocolInput(DRAGON_ACTIONS.BusRd, self.core_id, addr))
+                            self.bus_read_input[addr] = True
+                        return bus_output
 
                 access_state = self.cache.get_state(addr)
                 if access_state == DRAGON_STATES.SharedClean or access_state == DRAGON_STATES.SharedModified:
@@ -79,31 +91,51 @@ class CoreDragon(Core):
                 self.load_store_instr_count += 1
         # Inst Write Case
         elif instr_type == 1:
-            other_cores = self.check_state(addr, self.core_id)
-            someone_has_copy = False
-            for _, state in other_cores:
-                if state != DRAGON_STATES.Invalid:
-                    someone_has_copy = True
-                if state == DRAGON_STATES.Exclusive or state == DRAGON_STATES.Modified:
+            # other_cores = self.check_state(addr, self.core_id)
+            # someone_has_copy = False
+            # for _, state in other_cores:
+            #     if state != DRAGON_STATES.Invalid:
+            #         someone_has_copy = True
+            #     if state == DRAGON_STATES.Exclusive or state == DRAGON_STATES.Modified:
+            #         if addr not in self.bus_read_input.keys():
+            #             bus_output.append(BusProtocolInput(DRAGON_ACTIONS.BusRd, self.core_id, addr))
+            #             self.bus_read_input[addr] = True
+            #         return bus_output
+            
+            # # Check if someone else is in SharedModfied; if yes then we wait until he moved to shared clean
+            # for _, state in other_cores:
+            #     if state == DRAGON_STATES.SharedModified:
+            #         # Create new BusTransaction
+            #         self.bus_read_input[addr] = True
+            #         bus_output.append(BusProtocolInput(DRAGON_ACTIONS.BusUpd, self.core_id, addr))
+            #         return bus_output
+            if self.cache.update_cache(addr):
+
+                other_cores = self.check_state(addr, self.core_id)
+                someone_has_copy = False
+                for _, state in other_cores:
+                    if state != DRAGON_STATES.Invalid:
+                        someone_has_copy = True
                     if addr not in self.bus_read_input.keys():
                         bus_output.append(BusProtocolInput(DRAGON_ACTIONS.BusRd, self.core_id, addr))
                         self.bus_read_input[addr] = True
-                    return bus_output
-            
-            # Check if someone else is in SharedModfied; if yes then we wait until he moved to shared clean
-            for _, state in other_cores:
-                if state == DRAGON_STATES.SharedModified:
-                    # Create new BusTransaction
-                    self.bus_read_input[addr] = True
-                    bus_output.append(BusProtocolInput(DRAGON_ACTIONS.BusUpd, self.core_id, addr))
-                    return bus_output
-            if self.cache.update_cache(addr):
-                # access analysis
-                access_state = self.cache.get_state(addr)
-                if access_state == DRAGON_STATES.SharedClean or access_state == DRAGON_STATES.SharedModified:
-                    self.shared_access += 1
-                elif access_state == DRAGON_STATES.Exclusive or access_state == DRAGON_STATES.Modified:
-                    self.private_access += 1
+                        return bus_output
+                    if state == DRAGON_STATES.Exclusive or state == DRAGON_STATES.Modified:
+                        return bus_output
+                
+                # Check if someone else is in SharedModfied; if yes then we wait until he moved to shared clean
+                for _, state in other_cores:
+                    if state == DRAGON_STATES.SharedModified:
+                        # Create new BusTransaction
+                        self.bus_read_input[addr] = True
+                        bus_output.append(BusProtocolInput(DRAGON_ACTIONS.BusUpd, self.core_id, addr))
+                        return bus_output
+                    # access analysis
+                    access_state = self.cache.get_state(addr)
+                    if access_state == DRAGON_STATES.SharedClean or access_state == DRAGON_STATES.SharedModified:
+                        self.shared_access += 1
+                    elif access_state == DRAGON_STATES.Exclusive or access_state == DRAGON_STATES.Modified:
+                        self.private_access += 1
                 
                 # WriteMiss
                 if access_state == DRAGON_STATES.Invalid:
