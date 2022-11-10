@@ -1,7 +1,7 @@
 import logging
 
 from core import Core
-from bus import Bus, BusMESIInput
+from bus import Bus, BusProtocolInput
 from definitions import MESI_STATES
 
 class Computer:
@@ -21,8 +21,8 @@ class Computer:
         # Adding the bus
         self.bus = Bus()
     
-    def step(self, bus_transaction: BusMESIInput):
-        bus_actions = list['BusMESIInput']()
+    def step(self, bus_transaction: BusProtocolInput):
+        bus_actions = list['BusProtocolInput']()
         for core in self.cores:
             potential_input = core.step(bus_transaction)
             for input in potential_input:

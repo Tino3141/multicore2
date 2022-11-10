@@ -1,11 +1,11 @@
 import unittest
-from bus import BusMESIInput
+from bus import BusProtocolInput
 from core import Core
 from computer import Computer
-from definitions import MESI_ACTIONS, MESI_STATES
+from definitions import MESI_STATES, MESI_ACTIONS
 from mesi import MESI
 
-test_bus_input = BusMESIInput(MESI_ACTIONS.No_Action, 0, 0x1)
+test_bus_input = BusProtocolInput(MESI_ACTIONS.No_Action, 0, 0x1)
 
 class TestSuite(unittest.TestCase):
     def test_cache_hit(self):

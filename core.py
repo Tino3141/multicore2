@@ -1,6 +1,6 @@
 from audioop import add
 from collections import deque
-from bus import BusMESIInput
+from bus import BusProtocolInput
 from cache import Cache
 from definitions import MESI_ACTIONS, MESI_STATES
 from mesi import MESI
@@ -40,7 +40,7 @@ class Core:
         self.instr_stream.insert(1, flush_instr)
         self.flush_queue.append((addr, bus_action))
 
-    def step(self, bus_transaction: BusMESIInput):
+    def step(self, bus_transaction: BusProtocolInput):
         
         bus_output = []
         # snoop the bus
@@ -50,13 +50,13 @@ class Core:
                 # if we have the data
                 if address_state == MESI_STATES.Modified:
                     self.flush(bus_transaction.address, bus_transaction.action)
-                    bus_output.append(BusMESIInput(MESI_ACTIONS.Flush, self.core_id, bus_transaction.address))
+                    bus_output.append(BusProtocolInput(MESI_ACTIONS.Flush, self.core_id, bus_transaction.address))
                 elif address_state == MESI_STATES.Exclusive or address_state == MESI_STATES.Shared:
                     self.cache.update_state(bus_transaction.address, bus_transaction.action)
             elif bus_transaction.action == MESI_ACTIONS.BusRdx:
                 if address_state != MESI_STATES.Invalid:
                     self.flush(bus_transaction.address, bus_transaction.action)
-                    bus_output.append(BusMESIInput(MESI_ACTIONS.Flush, self.core_id, bus_transaction.address))
+                    bus_output.append(BusProtocolInput(MESI_ACTIONS.Flush, self.core_id, bus_transaction.address))
             else:
                 raise Exception("Invalid Bus transaction input to core " + str(bus_transaction.action))
 
@@ -83,7 +83,7 @@ class Core:
                     # on the first instance push onto bus, else nothing
                     if addr not in self.bus_read_input.keys():
                         # this is first instance push on bus and add to dict
-                        bus_output.append(BusMESIInput(MESI_ACTIONS.BusRd, self.core_id, addr))
+                        bus_output.append(BusProtocolInput(MESI_ACTIONS.BusRd, self.core_id, addr))
                         self.bus_read_input[addr] = True
                     return bus_output
             
@@ -116,7 +116,7 @@ class Core:
 
                 bus_mesi_action = self.cache.update_state(addr, MESI_ACTIONS.PrWr)
                 if bus_mesi_action != MESI_ACTIONS.No_Action:
-                    bus_output.append(BusMESIInput(bus_mesi_action, self.core_id, addr))
+                    bus_output.append(BusProtocolInput(bus_mesi_action, self.core_id, addr))
                 self.instr_stream.popleft()
                 self.load_store_instr_count += 1
         elif instr_type == 2:
