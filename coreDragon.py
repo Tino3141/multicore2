@@ -3,8 +3,8 @@ from definitions import DRAGON_ACTIONS, DRAGON_STATES, FLUSH_TIME
 from core import Core
 
 class CoreDragon(Core):
-    def __init__(self, instrStream, block, associativity, cache_size, check_state=..., core_id=0, cores_cnt=4) -> None:
-        super().__init__(instrStream, block, associativity, cache_size, check_state, core_id, cores_cnt)
+    def __init__(self, instrStream, block, associativity, cache_size, check_state=..., core_id=0, cores_cnt=4, check_flush=lambda addr, core_id: False) -> None:
+        super().__init__(instrStream, block, associativity, cache_size, check_state, core_id, cores_cnt, check_flush=check_flush)
 
     def step(self, bus_transaction: BusProtocolInput):
         bus_output = []
@@ -39,10 +39,17 @@ class CoreDragon(Core):
         if instr_type == 0:
             other_cores_states = self.check_state(addr, self.core_id)
             someone_has_copy = False
+            
             for _, state in other_cores_states:
                 if state != DRAGON_STATES.Invalid:
                     someone_has_copy = True
-                
+                if state == DRAGON_STATES.SharedModified or state == DRAGON_STATES.Modified:
+                    if addr not in self.bus_read_input.keys():
+                        bus_output.append(BusProtocolInput(DRAGON_ACTIONS.BusRd, self.core_id))
+                        return bus_output
+                # check if the flush state didn't change for others. then
+            if self.check_flush(addr, self.core_id):
+                return bus_output
             if addr in self.bus_read_input.keys():
                 del self.bus_read_input[addr]
         elif instr_type == 1:
