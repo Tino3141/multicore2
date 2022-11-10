@@ -43,7 +43,7 @@ class CoreDragon(Core):
             for _, state in other_cores_states:
                 if state != DRAGON_STATES.Invalid:
                     someone_has_copy = True
-                if state == DRAGON_STATES.Modified:
+                if state == DRAGON_STATES.Modified or state == DRAGON_STATES.Exclusive:
                     if addr not in self.bus_read_input.keys():
                         bus_output.append(BusProtocolInput(DRAGON_ACTIONS.BusRd, self.core_id, addr))
                         self.bus_read_input[addr] = True
@@ -84,6 +84,18 @@ class CoreDragon(Core):
             for _, state in other_cores:
                 if state != DRAGON_STATES.Invalid:
                     someone_has_copy = True
+                if state == DRAGON_STATES.Exclusive or state == DRAGON_STATES.Modified:
+                    if addr not in self.bus_read_input.keys():
+                        bus_output.append(BusProtocolInput(DRAGON_ACTIONS.BusRd, self.core_id, addr))
+                        self.bus_read_input[addr] = True
+                    return bus_output
+            
+            # Check if someone else is in SharedModfied; if yes then we wait until he moved to shared clean
+            for _, state in other_cores:
+                if state == DRAGON_STATES.SharedModified:
+                    # Create new BusTransaction
+                    self.bus_read_input[addr] = True
+                    bus_output.append(BusProtocolInput(DRAGON_ACTIONS.BusUpd, self.core_id, addr))
             if self.cache.update_cache(addr):
                 # access analysis
                 access_state = self.cache.get_state(addr)
@@ -97,7 +109,7 @@ class CoreDragon(Core):
                    
                     bus_action = self.cache.update_state(addr, DRAGON_ACTIONS.PrWrMiss, someone_has_copy=someone_has_copy)
                     bus_output.append(BusProtocolInput(bus_action, self.core_id, addr))
-                # ReadMiss
+                # WriteHit
                 else:
                     bus_action = self.cache.update_state(addr, DRAGON_ACTIONS.PrWr, someone_has_copy=someone_has_copy)
                     bus_output.append(BusProtocolInput(bus_action, self.core_id, addr))

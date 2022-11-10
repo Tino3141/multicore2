@@ -1,32 +1,32 @@
 class PROTOCOL_STATES():
-    Invalid = 0
+    Invalid = "Invalid"
 
 class MESI_STATES(PROTOCOL_STATES):
-    Shared = 1
-    Exclusive = 2
-    Modified = 3 
+    Shared = "Shared"
+    Exclusive = "Exclusive"
+    Modified = "Modified"
 
 class DRAGON_STATES(PROTOCOL_STATES):
-    Exclusive = 1
-    SharedClean = 2
-    SharedModified = 3
-    Modified = 4
+    Exclusive = "Exclusive"
+    SharedClean = "SharedClean"
+    SharedModified = "SharedModified"
+    Modified = "Modified"
 
 class PROTOCOL_ACTIONS(object):
-    PrRd = 0
-    PrWr = 1
-    BusRd = 2
-    Flush = 4
-    No_Action = 5
+    PrRd = "PrRd"
+    PrWr = "PrWr"
+    BusRd = "BusRd"
+    Flush = "Flush"
+    No_Action = "No_Action"
 
 class MESI_ACTIONS(PROTOCOL_ACTIONS):
-    BusRdx = 6
+    BusRdx = "BusRdx"
 
 
 class DRAGON_ACTIONS(PROTOCOL_ACTIONS):
-    PrRdMiss = 6
-    PrWrMiss = 7
-    BusUpd = 8
+    PrRdMiss = "PrRdMiss"
+    PrWrMiss = "PrWrMiss"
+    BusUpd = "BusUpd"
 # Constants
 FLUSH_TIME = 99
 

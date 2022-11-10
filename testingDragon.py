@@ -138,5 +138,42 @@ class TestSuite(unittest.TestCase):
         self.assertEqual(computer.cores[0].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedModified)
         self.assertEqual(computer.cores[1].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedClean)
 
+    def test_multi_reads(self):
+        instr_1 = [
+            (0, 0x100001)
+        ]
+
+        instr_2 = [
+            (0, 0x100001)
+        ]
+
+        instructions = [instr_1, instr_2]
+
+        computer = Computer(instructions, number_cores=2, MESI=False)
+        computer.start()
+
+        self.assertEqual(computer.current_cycle, 107)
+        self.assertEqual(computer.cores[0].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedClean)
+        self.assertEqual(computer.cores[1].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedClean)
+
+
+    def test_multi_writes(self):
+        instr_1 = [
+            (1, 0x100001)
+        ]
+
+        instr_2 = [
+            (1, 0x100001)
+        ]
+
+        instructions = [instr_1, instr_2]
+
+        computer = Computer(instructions, number_cores=2, MESI=False)
+        computer.start()
+
+        self.assertEqual(computer.current_cycle, 206)
+        self.assertEqual(computer.cores[0].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedClean)
+        self.assertEqual(computer.cores[1].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedModified)
+
 if __name__ == '__main__':
     unittest.main()
