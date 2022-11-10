@@ -7,7 +7,7 @@ from mesi import MESI
 
 test_bus_input = BusProtocolInput(MESI_ACTIONS.No_Action, 0, 0x1)
 
-class TestSuiteMESI(unittest.TestCase):
+class TestSuite(unittest.TestCase):
     def test_cache_hit(self):
         instructions = [
             (0, 0x1),

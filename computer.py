@@ -1,12 +1,12 @@
 import logging
 
-from core import Core
+from coreMESI import CoreMESI
+from coreDragon import CoreDragon
 from bus import Bus, BusProtocolInput
-from definitions import MESI_STATES
 
 class Computer:
     
-    def __init__(self, instr, block=16, associativity=1, cache_size=1024, number_cores=4) -> None:
+    def __init__(self, instr, block=16, associativity=1, cache_size=1024, number_cores=4, MESI=True) -> None:
 
         if len(instr) != number_cores:
             raise "Wrong number of instructions streams"
@@ -16,7 +16,10 @@ class Computer:
         
         # Adding the cores
         for i in range(0, number_cores):
-            self.cores.append(Core(instr[i], block, associativity, cache_size, self.check_state, i, cores_cnt=number_cores))
+            if MESI:
+                self.cores.append(CoreMESI(instr[i], block, associativity, cache_size, self.check_state, i, cores_cnt=number_cores))
+            else: 
+                self.cores.append(CoreDragon(instr[i], block, associativity, cache_size, self.check_state, i, cores_cnt=number_cores))
 
         # Adding the bus
         self.bus = Bus()
