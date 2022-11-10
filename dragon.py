@@ -2,7 +2,7 @@ from definitions import DRAGON_STATES, DRAGON_ACTIONS
 
 class Dragon: 
 
-  def __init__(self, init_state=DRAGON_STATES.Invalid) -> None:
+  def __init__(self, init_state=DRAGON_STATES.Loaded) -> None:
     self.current_state = init_state
     pass
 
@@ -48,7 +48,7 @@ class Dragon:
         return DRAGON_ACTIONS.No_Action
       else:
         return DRAGON_ACTIONS.No_Action
-    else: # This case is the invalid case (not a real Dragon State but used as a helper)   
+    elif self.current_state == DRAGON_STATES.Loaded: # This case is the invalid case (not a real Dragon State but used as a helper)   
       if input == DRAGON_ACTIONS.PrRdMiss and not someone_has_copy:
         self.current_state = DRAGON_STATES.Exclusive
         return DRAGON_ACTIONS.BusRd
@@ -61,5 +61,7 @@ class Dragon:
       elif input == DRAGON_ACTIONS.PrWrMiss and someone_has_copy:
         self.current_state = DRAGON_STATES.SharedModified
         return DRAGON_ACTIONS.BusRd
-      else:
-        raise Exception("Invalid Dragon state reached.")
+    elif self.current_state == DRAGON_STATES.Invalid:
+      return DRAGON_ACTIONS.No_Action
+    else:
+      raise Exception("Invalid Dragon state reached " + str(self.current_state))

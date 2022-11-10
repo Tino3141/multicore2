@@ -79,7 +79,7 @@ class CoreDragon(Core):
                 elif access_state == DRAGON_STATES.Exclusive or access_state == DRAGON_STATES.Modified:
                     self.private_access += 1
                 
-                if access_state == DRAGON_STATES.Invalid:
+                if access_state == DRAGON_STATES.Loaded:
                     bus_action = self.cache.update_state(addr, DRAGON_ACTIONS.PrRdMiss, someone_has_copy=someone_has_copy)
                     bus_output.append(BusProtocolInput(bus_action, self.core_id, addr))
 
@@ -136,9 +136,9 @@ class CoreDragon(Core):
                         self.shared_access += 1
                     elif access_state == DRAGON_STATES.Exclusive or access_state == DRAGON_STATES.Modified:
                         self.private_access += 1
-                
+                access_state = self.cache.get_state(addr)
                 # WriteMiss
-                if access_state == DRAGON_STATES.Invalid:
+                if access_state == DRAGON_STATES.Loaded:
                    
                     bus_action = self.cache.update_state(addr, DRAGON_ACTIONS.PrWrMiss, someone_has_copy=someone_has_copy)
                     bus_output.append(BusProtocolInput(bus_action, self.core_id, addr))
