@@ -139,21 +139,21 @@ class TestSuite(unittest.TestCase):
         instructions = [instr_1]
         computer = Computer(instructions, number_cores=1, MESI=False)
         computer.start()
-        self.assertEqual(computer.current_cycle, 102)
+        self.assertEqual(computer.current_cycle, 100)
         self.assertEqual(computer.cores[0].cache.indexes[0][0][0].current_state, DRAGON_STATES.Modified)
 
     
     def test_multi_simple(self):
 
         instr_1 = [
-            (0, 0x100001),
-            (1, 0xff2f2)
+            (1, 0x100001),
+            (0, 0x2111)
             
         ]
 
         instr_2 = [
-            (0, 0xff2f2),
-            (1, 0x100001)
+            (1, 0x2111),           
+            (0, 0x100001),
         ]
         
         instructions = [instr_1, instr_2]
@@ -161,275 +161,275 @@ class TestSuite(unittest.TestCase):
         computer = Computer(instructions, number_cores=2, MESI=False)
         computer.start()
 
-        self.assertEqual(computer.current_cycle, 206)
+        self.assertEqual(computer.current_cycle, 302)
+        self.assertEqual(computer.cores[0].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedModified)
+        self.assertEqual(computer.cores[1].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedClean)
+
+    def test_multi_reads(self):
+        instr_1 = [
+            (0, 0x100001)
+        ]
+
+        instr_2 = [
+            (0, 0x100001)
+        ]
+
+        instructions = [instr_1, instr_2]
+
+        computer = Computer(instructions, number_cores=2, MESI=False)
+        computer.start()
+
+        self.assertEqual(computer.current_cycle, 103)
+        self.assertEqual(computer.cores[0].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedClean)
+        self.assertEqual(computer.cores[1].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedClean)
+
+
+    def test_multi_writes(self):
+        instr_1 = [
+            (1, 0x100001)
+        ]
+
+        instr_2 = [
+            (1, 0x100001)
+        ]
+
+        instructions = [instr_1, instr_2]
+
+        computer = Computer(instructions, number_cores=2, MESI=False)
+        computer.start()
+
+        self.assertEqual(computer.current_cycle, 202)
         self.assertEqual(computer.cores[0].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedClean)
         self.assertEqual(computer.cores[1].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedModified)
 
-    # def test_multi_reads(self):
-    #     instr_1 = [
-    #         (0, 0x100001)
-    #     ]
+    def test_mutli_write2(self):
+        instr_1 = [
+            (2, 0x10),
+            (1, 0x100001)
+        ]
 
-    #     instr_2 = [
-    #         (0, 0x100001)
-    #     ]
+        instr_2 = [
+            (1, 0x100001)
+        ]
+        instructions = [instr_1, instr_2]
 
-    #     instructions = [instr_1, instr_2]
+        computer = Computer(instructions, number_cores=2, MESI=False)
+        computer.start()
 
-    #     computer = Computer(instructions, number_cores=2, MESI=False)
-    #     computer.start()
-
-    #     self.assertEqual(computer.current_cycle, 108)
-    #     self.assertEqual(computer.cores[0].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedClean)
-    #     self.assertEqual(computer.cores[1].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedClean)
-
-
-    # def test_multi_writes(self):
-    #     instr_1 = [
-    #         (1, 0x100001)
-    #     ]
-
-    #     instr_2 = [
-    #         (1, 0x100001)
-    #     ]
-
-    #     instructions = [instr_1, instr_2]
-
-    #     computer = Computer(instructions, number_cores=2, MESI=False)
-    #     computer.start()
-
-    #     self.assertEqual(computer.current_cycle, 203)
-    #     self.assertEqual(computer.cores[0].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedClean)
-    #     self.assertEqual(computer.cores[1].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedModified)
-
-    # def test_mutli_write2(self):
-    #     instr_1 = [
-    #         (2, 0x10),
-    #         (1, 0x100001)
-    #     ]
-
-    #     instr_2 = [
-    #         (1, 0x100001)
-    #     ]
-    #     instructions = [instr_1, instr_2]
-
-    #     computer = Computer(instructions, number_cores=2, MESI=False)
-    #     computer.start()
-
-    #     self.assertEqual(computer.current_cycle, 225)
-    #     self.assertEqual(computer.cores[0].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedModified)
-    #     self.assertEqual(computer.cores[1].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedClean)
+        self.assertEqual(computer.current_cycle, 222)
+        self.assertEqual(computer.cores[0].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedModified)
+        self.assertEqual(computer.cores[1].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedClean)
 
 
-    # def test_multi_read_write(self):
-    #     instr_1 = [
-    #         (1, 0x100001)
-    #     ]
+    def test_multi_read_write(self):
+        instr_1 = [
+            (1, 0x100001)
+        ]
 
-    #     instr_2 = [
-    #         (2, 0x10),
-    #         (0, 0x100001)
-    #     ]
+        instr_2 = [
+            (2, 0x10),
+            (0, 0x100001)
+        ]
 
-    #     instructions = [instr_1, instr_2]
+        instructions = [instr_1, instr_2]
 
-    #     computer = Computer(instructions, number_cores=2, MESI=False)
-    #     computer.start()
+        computer = Computer(instructions, number_cores=2, MESI=False)
+        computer.start()
 
-    #     self.assertEqual(computer.current_cycle, 322)
-    #     self.assertEqual(computer.cores[0].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedModified)
-    #     self.assertEqual(computer.cores[1].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedClean)
+        self.assertEqual(computer.current_cycle, 216)
+        self.assertEqual(computer.cores[0].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedModified)
+        self.assertEqual(computer.cores[1].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedClean)
 
 
-    # def test_multi_write_read(self):
-    #     instr_1 = [
-    #         (0, 0x100001)
-    #     ]
+    def test_multi_write_read(self):
+        instr_1 = [
+            (0, 0x100001)
+        ]
 
-    #     instr_2 = [
-    #         (2, 0x10),
-    #         (1, 0x100001)
-    #     ]
+        instr_2 = [
+            (2, 0x10),
+            (1, 0x100001)
+        ]
 
-    #     instructions = [instr_1, instr_2]
+        instructions = [instr_1, instr_2]
 
-    #     computer = Computer(instructions, number_cores=2, MESI=False)
-    #     computer.start()
+        computer = Computer(instructions, number_cores=2, MESI=False)
+        computer.start()
 
-    #     self.assertEqual(computer.current_cycle, 122)
-    #     self.assertEqual(computer.cores[0].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedClean)
-    #     self.assertEqual(computer.cores[1].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedModified)
+        self.assertEqual(computer.current_cycle, 118)
+        self.assertEqual(computer.cores[0].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedClean)
+        self.assertEqual(computer.cores[1].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedModified)
     
-    # def test_state_swap(self):
-    #     instr_1 = [
-    #         (0, 0x100001),
-    #         (2, 0x12),
-    #         (1, 0x100001)
-    #     ]
+    def test_state_swap(self):
+        instr_1 = [
+            (0, 0x100001),
+            (2, 0x12),
+            (1, 0x100001)
+        ]
 
-    #     instr_2 = [
-    #         (2, 0x10),
-    #         (1, 0x100001)
-    #     ]
+        instr_2 = [
+            (2, 0x10),
+            (1, 0x100001)
+        ]
 
-    #     instructions = [instr_1, instr_2]
+        instructions = [instr_1, instr_2]
 
-    #     computer = Computer(instructions, number_cores=2, MESI=False)
-    #     computer.start()
+        computer = Computer(instructions, number_cores=2, MESI=False)
+        computer.start()
 
-    #     # self.assertEqual(computer.current_cycle, 123)
-    #     self.assertEqual(computer.cores[0].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedModified)
-    #     self.assertEqual(computer.cores[1].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedClean)
+        # self.assertEqual(computer.current_cycle, 123)
+        self.assertEqual(computer.cores[0].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedClean)
+        self.assertEqual(computer.cores[1].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedModified)
     
-    # def test_4_cores_read_with_delay(self):
-    #     instr_1 = [
-    #         (0, 0x100001)
-    #     ]
+    def test_4_cores_read_with_delay(self):
+        instr_1 = [
+            (0, 0x100001)
+        ]
 
-    #     instr_2 = [
-    #         (2, 0x10),
-    #         (0, 0x100001)
-    #     ]
+        instr_2 = [
+            (2, 0x10),
+            (0, 0x100001)
+        ]
 
-    #     instr_3 = [
-    #         (2, 0x20),
-    #         (0, 0x100001)
-    #     ]
+        instr_3 = [
+            (2, 0x20),
+            (0, 0x100001)
+        ]
 
-    #     instr_4 = [
-    #         (2, 0x30),
-    #         (0, 0x100001)           
-    #     ]
+        instr_4 = [
+            (2, 0x30),
+            (0, 0x100001)           
+        ]
         
 
-    #     instructions = [instr_1, instr_2, instr_3, instr_4]
+        instructions = [instr_1, instr_2, instr_3, instr_4]
 
-    #     computer = Computer(instructions, number_cores=4, MESI=False)
-    #     computer.start()
+        computer = Computer(instructions, number_cores=4, MESI=False)
+        computer.start()
 
-    #     self.assertEqual(computer.current_cycle, 151)
-    #     self.assertEqual(computer.cores[1].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedClean)
-    #     self.assertEqual(computer.cores[2].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedClean)
-    #     self.assertEqual(computer.cores[0].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedClean)
-    #     self.assertEqual(computer.cores[3].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedClean)
+        self.assertEqual(computer.current_cycle, 143)
+        self.assertEqual(computer.cores[1].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedClean)
+        self.assertEqual(computer.cores[2].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedClean)
+        self.assertEqual(computer.cores[0].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedClean)
+        self.assertEqual(computer.cores[3].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedClean)
 
-    # def test_4_cores_read_with_delay(self):
-    #     instr_1 = [
-    #         (0, 0x100001)
-    #     ]
+    def test_4_cores_read_with_delay(self):
+        instr_1 = [
+            (0, 0x100001)
+        ]
 
-    #     instr_2 = [
-    #         (0, 0x100001)
-    #     ]
+        instr_2 = [
+            (0, 0x100001)
+        ]
 
-    #     instr_3 = [
-    #         (0, 0x100001)
-    #     ]
+        instr_3 = [
+            (0, 0x100001)
+        ]
 
-    #     instr_4 = [
-    #         (0, 0x100001)           
-    #     ]
+        instr_4 = [
+            (0, 0x100001)           
+        ]
         
 
-    #     instructions = [instr_1, instr_2, instr_3, instr_4]
+        instructions = [instr_1, instr_2, instr_3, instr_4]
 
-    #     computer = Computer(instructions, number_cores=4, MESI=False)
-    #     computer.start()
+        computer = Computer(instructions, number_cores=4, MESI=False)
+        computer.start()
 
-    #     self.assertEqual(computer.current_cycle, 118)
-    #     self.assertEqual(computer.cores[1].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedClean)
-    #     self.assertEqual(computer.cores[2].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedClean)
-    #     self.assertEqual(computer.cores[0].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedClean)
-    #     self.assertEqual(computer.cores[3].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedClean)
+        self.assertEqual(computer.current_cycle, 104)
+        self.assertEqual(computer.cores[1].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedClean)
+        self.assertEqual(computer.cores[2].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedClean)
+        self.assertEqual(computer.cores[0].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedClean)
+        self.assertEqual(computer.cores[3].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedClean)
 
-    # def test_4_cores_read_write(self):
-    #     instr_1 = [
-    #         (1, 0x100001)
-    #     ]
+    def test_4_cores_read_write(self):
+        instr_1 = [
+            (1, 0x100001)
+        ]
 
-    #     instr_2 = [
-    #         (2, 0x10),
-    #         (0, 0x100001)
-    #     ]
+        instr_2 = [
+            (2, 0x10),
+            (0, 0x100001)
+        ]
 
-    #     instr_3 = [
-    #         (2, 0x10),
-    #         (0, 0x100001)
-    #     ]
+        instr_3 = [
+            (2, 0x10),
+            (0, 0x100001)
+        ]
 
-    #     instr_4 = [
-    #         (2, 0x20),
-    #         (0, 0x100001)           
-    #     ]
+        instr_4 = [
+            (2, 0x20),
+            (0, 0x100001)           
+        ]
         
 
-    #     instructions = [instr_1, instr_2, instr_3, instr_4]
+        instructions = [instr_1, instr_2, instr_3, instr_4]
 
-    #     computer = Computer(instructions, number_cores=4, MESI=False)
-    #     computer.start()
+        computer = Computer(instructions, number_cores=4, MESI=False)
+        computer.start()
 
-    #     self.assertEqual(computer.current_cycle, 698)
-    #     self.assertEqual(computer.cores[1].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedClean)
-    #     self.assertEqual(computer.cores[2].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedClean)
-    #     self.assertEqual(computer.cores[0].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedModified)
-    #     self.assertEqual(computer.cores[3].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedClean)
+        self.assertEqual(computer.current_cycle, 215)
+        self.assertEqual(computer.cores[1].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedClean)
+        self.assertEqual(computer.cores[2].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedClean)
+        self.assertEqual(computer.cores[0].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedModified)
+        self.assertEqual(computer.cores[3].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedClean)
 
-    # def test_4_cores_writes_delayed(self):
-    #     instr_1 = [
-    #         (1, 0x100001)
-    #     ]
+    def test_4_cores_writes_delayed(self):
+        instr_1 = [
+            (1, 0x100001)
+        ]
 
-    #     instr_2 = [
-    #         (2, 0x10),
-    #         (1, 0x100001)
-    #     ]
+        instr_2 = [
+            (2, 0x10),
+            (1, 0x100001)
+        ]
 
-    #     instr_3 = [
-    #         (2, 0x20),
-    #         (1, 0x100001)
-    #     ]
+        instr_3 = [
+            (2, 0x20),
+            (1, 0x100001)
+        ]
 
-    #     instr_4 = [
-    #         (2, 0x30),
-    #         (1, 0x100001)           
-    #     ]
+        instr_4 = [
+            (2, 0x30),
+            (1, 0x100001)           
+        ]
         
 
-    #     instructions = [instr_1, instr_2, instr_3, instr_4]
+        instructions = [instr_1, instr_2, instr_3, instr_4]
 
-    #     computer = Computer(instructions, number_cores=4, MESI=False)
-    #     computer.start()
+        computer = Computer(instructions, number_cores=4, MESI=False)
+        computer.start()
 
-    #     self.assertEqual(computer.current_cycle, 234)
-    #     self.assertEqual(computer.cores[0].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedClean)
-    #     self.assertEqual(computer.cores[1].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedClean)
-    #     self.assertEqual(computer.cores[2].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedClean)
-    #     self.assertEqual(computer.cores[3].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedClean)
+        self.assertEqual(computer.current_cycle, 227)
+        self.assertEqual(computer.cores[0].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedClean)
+        self.assertEqual(computer.cores[1].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedClean)
+        self.assertEqual(computer.cores[2].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedClean)
+        self.assertEqual(computer.cores[3].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedClean)
 
-    # def test_4_core_write_delayed(self):
-    #     instr_1 = [
-    #         (1, 0x100001)
-    #     ]
+    def test_4_core_write_delayed(self):
+        instr_1 = [
+            (1, 0x100001)
+        ]
 
-    #     instr_2 = [
-    #         (1, 0x2000001)
-    #     ]
+        instr_2 = [
+            (1, 0x2000001)
+        ]
 
-    #     instr_3 = [
-    #         (1, 0x3000001)
-    #     ]
+        instr_3 = [
+            (1, 0x3000001)
+        ]
 
-    #     instr_4 = [
-    #         (1, 0x4000001)           
-    #     ]
+        instr_4 = [
+            (1, 0x4000001)           
+        ]
         
 
-    #     instructions = [instr_1, instr_2, instr_3, instr_4]
+        instructions = [instr_1, instr_2, instr_3, instr_4]
 
-    #     computer = Computer(instructions, number_cores=4, MESI=False)
-    #     computer.start()
+        computer = Computer(instructions, number_cores=4, MESI=False)
+        computer.start()
 
-    #     self.assertEqual(computer.current_cycle, 110)
+        self.assertEqual(computer.current_cycle, 105)
  
 
 

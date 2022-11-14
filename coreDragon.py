@@ -54,8 +54,7 @@ class CoreDragon(Core):
 
             if self.check_flush(addr, self.core_id):
                 return bus_output
-            if addr in self.bus_read_input.keys():
-                del self.bus_read_input[addr]
+           
 
 
             if (self.cache.update_cache(addr)):
@@ -72,6 +71,9 @@ class CoreDragon(Core):
                             bus_output.append(BusProtocolInput(DRAGON_ACTIONS.BusRd, self.core_id, addr))
                             self.bus_read_input[addr] = True
                         return bus_output
+                    # Moved that here
+                    if addr in self.bus_read_input.keys():
+                        del self.bus_read_input[addr]
 
                 access_state = self.cache.get_state(addr)
                 if access_state == DRAGON_STATES.SharedClean or access_state == DRAGON_STATES.SharedModified:
@@ -81,11 +83,11 @@ class CoreDragon(Core):
                 
                 if access_state == DRAGON_STATES.Loaded:
                     bus_action = self.cache.update_state(addr, DRAGON_ACTIONS.PrRdMiss, someone_has_copy=someone_has_copy)
-                    bus_output.append(BusProtocolInput(bus_action, self.core_id, addr))
+                   # bus_output.append(BusProtocolInput(bus_action, self.core_id, addr))
 
                 else:
                     bus_action = self.cache.update_state(addr, DRAGON_ACTIONS.PrRd, someone_has_copy=someone_has_copy)
-                    bus_output.append(BusProtocolInput(bus_action, self.core_id, addr))
+                    #bus_output.append(BusProtocolInput(bus_action, self.core_id, addr))
                     
                 self.instr_stream.popleft()
                 self.load_store_instr_count += 1
@@ -141,11 +143,11 @@ class CoreDragon(Core):
                 if access_state == DRAGON_STATES.Loaded:
                    
                     bus_action = self.cache.update_state(addr, DRAGON_ACTIONS.PrWrMiss, someone_has_copy=someone_has_copy)
-                    bus_output.append(BusProtocolInput(bus_action, self.core_id, addr))
+                    #bus_output.append(BusProtocolInput(bus_action, self.core_id, addr))
                 # WriteHit
                 else:
                     bus_action = self.cache.update_state(addr, DRAGON_ACTIONS.PrWr, someone_has_copy=someone_has_copy)
-                    bus_output.append(BusProtocolInput(bus_action, self.core_id, addr))
+                    #bus_output.append(BusProtocolInput(bus_action, self.core_id, addr))
                 self.instr_stream.popleft()
                 self.load_store_instr_count += 1
         elif instr_type == 2:
@@ -165,7 +167,7 @@ class CoreDragon(Core):
             elif self.wait_counter > 0:
                 self.dec_wait()
             if self.wait_counter == 0: # Counter is 0 i.e. continue
-                self.instr_stream.popleft()
+                _, addr = self.instr_stream.popleft()
                 self.flush_directory[addr].remove(self.core_id)
                 flush_addr, mesi_action = self.flush_queue.popleft()
                 self.dec_wait()           

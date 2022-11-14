@@ -44,8 +44,8 @@ class Core:
             self.flush_directory[addr].append(self.core_id)
         else:
             self.flush_directory[addr] = [self.core_id]
-        self.instr_stream.insert(1, flush_instr)
-        self.flush_queue.append((addr, bus_action))
+        self.instr_stream.appendleft(flush_instr)
+        self.flush_queue.appendleft((addr, bus_action))
 
     def step():
         raise Exception("Step not implemented")
