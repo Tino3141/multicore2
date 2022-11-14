@@ -43,7 +43,7 @@ def main():
 
     logging.info("Finished reading file %s", ARGS.input)
 
-    computer = Computer(instructions, ARGS.block, ARGS.associativity, ARGS.cache, MESI=ARGS.protocol=="MESI")
+    computer = Computer(instructions, ARGS.block, ARGS.associativity, ARGS.cache,number_cores=4, MESI=ARGS.protocol=="MESI")
     logging.info("Starting the computer")
     computer.start()
     logging.info("Closing the computer")

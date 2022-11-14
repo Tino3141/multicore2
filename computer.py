@@ -44,9 +44,12 @@ class Computer:
         return True
     
     def start(self):
+        counter = 0 
         while not self.is_done():
-            if self.current_cycle % 10000000 == 0:
+            if counter % 1000000 == 0:
                 logging.debug(f"Time: {datetime.datetime.now()}Current Cycle: {self.current_cycle} and {len(self.cores[0].instr_stream)} instructions left on core 0")
+            
+            counter += 1
             bus_transaction = self.bus.get_transaction()
             bus_actions = self.step(bus_transaction)
             self.bus.create_transaction(bus_actions)
