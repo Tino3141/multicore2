@@ -149,7 +149,8 @@ class CoreDragon(Core):
                 self.instr_stream.popleft()
                 self.load_store_instr_count += 1
         elif instr_type == 2:
-            if self.wait_counter == -1:
+            if self.wait_counter < 0:
+                self.wait_counter = -1
                 self.add_wait(addr) # Addr adds wait time for type 2 instructions (naming issue)
             elif self.wait_counter > 0:
                 self.dec_wait()
@@ -158,7 +159,8 @@ class CoreDragon(Core):
                 self.compute_cycle_count += cycles
                 self.dec_wait()
         elif instr_type == 3:
-            if self.wait_counter == -1:
+            if self.wait_counter < 0:
+                self.wait_counter = -1
                 self.add_wait(FLUSH_TIME) # Addr adds wait time for type 2 instructions (naming issue)
             elif self.wait_counter > 0:
                 self.dec_wait()

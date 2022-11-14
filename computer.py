@@ -1,5 +1,6 @@
 import datetime
 import logging
+import math
 import sys
 
 from coreMESI import CoreMESI
@@ -8,15 +9,14 @@ from bus import Bus, BusProtocolInput
 
 class Computer:
     
-    def __init__(self, instr, block=16, associativity=1, cache_size=1024, number_cores=4, MESI=True) -> None:
+    def __init__(self, instr, block=16, associativity=1, cache_size=1024, number_cores=2, MESI=True) -> None:
 
-        if len(instr) != number_cores:
-            raise "Wrong number of instructions streams"
+        # if len(instr) != number_cores:
+        #     raise "Wrong number of instructions streams"
         
         self.cores = []
         self.current_cycle = 0
         self.flush_directory = {}
-        
         # Adding the cores
         for i in range(0, number_cores):
             if MESI:
@@ -45,22 +45,35 @@ class Computer:
     
     def start(self):
         while not self.is_done():
-            if self.current_cycle % 1000000 == 0:
+            if self.current_cycle % 10000000 == 0:
                 logging.debug(f"Time: {datetime.datetime.now()}Current Cycle: {self.current_cycle} and {len(self.cores[0].instr_stream)} instructions left on core 0")
             bus_transaction = self.bus.get_transaction()
             bus_actions = self.step(bus_transaction)
             self.bus.create_transaction(bus_actions)
             # Check all core if they are waiting and if the bus is empty
-            self.current_cycle += 1
-            # min_wait_time = sys.maxsize
-            # someone_wait = False
-            # for core in self.cores:
-            #     if core.wait_counter>0 and core.wait_counter < min_wait_time:
-            #         min_wait_time = core.wait_counter
-            #         someone_wait = True
-            #     if core.cache.wait_counter >= 0 and core.cache.wait_counter < min_wait_time:
-            #         min_wait_time = core.cache.wait_counter
-            #         someone_wait = True
+            # self.current_cycle += 1
+            min_wait_time = sys.maxsize
+            all_wait = True
+            for core in self.cores:
+                if core.wait_counter>=0 and core.wait_counter < min_wait_time:
+                    min_wait_time = min(core.wait_counter, min_wait_time) 
+                if core.cache.wait_counter >= 0 and core.cache.wait_counter < min_wait_time:
+                    min_wait_time =  min(core.cache.wait_counter, min_wait_time)
+
+                if core.cache.wait_counter < 0 and core.wait_counter < 0 and (not core.terminated):
+                    all_wait = False
+            
+            if all_wait and (not self.bus.queue) and (not self.is_done()):
+                # print(f"Jump by {min_wait_time}")
+                self.current_cycle += min_wait_time
+                #print(f"Jump: {min_wait_time}")
+                for core in self.cores:
+                    core.wait_counter -= min_wait_time
+                    core.cache.wait_counter -= min_wait_time
+            else:
+                #print("No jump")
+                self.current_cycle += 1
+            
                 
 
             # if min_wait_time < 0 or (not self.bus.queue) or (not someone_wait):

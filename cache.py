@@ -76,9 +76,11 @@ class Cache:
 
             if len(queue) == self.associativity:
                 # wait time for evicting
+                self.wait_counter = -1
                 self.add_wait(EVICTION_WAIT)
                 return False
             # wait time for fetching from main memory
+            self.wait_counter = -1
             self.add_wait(FETCH_WAIT)
             
             return False
