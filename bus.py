@@ -1,6 +1,6 @@
 from collections import deque
 # from definitions import MESI_ACTIONS
-from definitions import PROTOCOL_ACTIONS
+from definitions import DRAGON_ACTIONS, MESI_ACTIONS, PROTOCOL_ACTIONS
 
 BYTES_PER_WORD = 4
 class BusProtocolInput:
@@ -27,8 +27,8 @@ class Bus:
     if len(self.queue) > 0:
       if self.queue[0].action != PROTOCOL_ACTIONS.No_Action:
         self.data_processed += BYTES_PER_WORD 
-      # if self.queue[0].action == MESI_ACTIONS.BusRdx:
-        # self.data_invalidated += 1
+      if self.queue[0].action == MESI_ACTIONS.BusRdx or self.queue[0].action == DRAGON_ACTIONS.BusUpd:
+        self.data_invalidated += 1
       return self.queue.popleft()
     return None
   

@@ -1,0 +1,49 @@
+INFO:root:Starting to read file test_four
+INFO:root:Finished reading file test_four
+INFO:root:Starting the computer
+DEBUG:root:Current Cycle: 0
+INFO:root:Overall Execution Cycle: 493177
+INFO:root:Core 0 cycle: 155796
+INFO:root:Core 1 cycle: 379165
+INFO:root:Core 2 cycle: 493174
+INFO:root:Core 3 cycle: 305364
+INFO:root:Core 0 compute cycles: 46435
+INFO:root:Core 1 compute cycles: 73234
+INFO:root:Core 2 compute cycles: 15208
+INFO:root:Core 3 compute cycles: 23266
+INFO:root:Core 0 load/store count: 2513
+INFO:root:Core 1 load/store count: 2654
+INFO:root:Core 2 load/store count: 2666
+INFO:root:Core 3 load/store count: 2616
+INFO:root:Core 0 idle cycle count: 84167
+INFO:root:Core 1 idle cycle count: 198096
+INFO:root:Core 2 idle cycle count: 73423
+INFO:root:Core 3 idle cycle count: 173322
+DEBUG:root:0 hit is 1961
+INFO:root:Core 0 cache miss rate: 0.21965777954635893
+INFO:root:Core 0 cache hit rate: 0.7803422204536411
+DEBUG:root:1 hit is 1107
+INFO:root:Core 1 cache miss rate: 0.5828937452901282
+INFO:root:Core 1 cache hit rate: 0.41710625470987184
+DEBUG:root:2 hit is 258
+INFO:root:Core 2 cache miss rate: 0.9032258064516129
+INFO:root:Core 2 cache hit rate: 0.09677419354838712
+DEBUG:root:3 hit is 1188
+INFO:root:Core 3 cache miss rate: 0.5458715596330275
+INFO:root:Core 3 cache hit rate: 0.45412844036697253
+INFO:root:Data traffic on bus: 13196 bytes
+INFO:root:Invalidations or updates on bus: 3244
+INFO:root:Core 0 shared access: 160
+INFO:root:Core 0 private access: 1801
+INFO:root:Core 0 access distribution (shared / private): 0.0815910249872514
+INFO:root:Core 1 shared access: 45
+INFO:root:Core 1 private access: 1062
+INFO:root:Core 1 access distribution (shared / private): 0.04065040650406504
+INFO:root:Core 2 shared access: 0
+INFO:root:Core 2 private access: 258
+INFO:root:Core 2 access distribution (shared / private): 0.0
+INFO:root:Core 3 shared access: 14
+INFO:root:Core 3 private access: 1174
+INFO:root:Core 3 access distribution (shared / private): 0.011784511784511785
+INFO:root:Logging complete!
+INFO:root:Closing the computer

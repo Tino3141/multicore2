@@ -1,4 +1,5 @@
 import logging
+import sys
 
 from coreMESI import CoreMESI
 from coreDragon import CoreDragon
@@ -44,11 +45,21 @@ class Computer:
     def start(self):
         while not self.is_done():
             if self.current_cycle % 500000 == 0:
-                logging.debug(f"Current Cycle: {self.current_cycle}")
+                logging.debug(f"Current Cycle: {self.current_cycle} and {len(self.cores[0].instr_stream)} instructions left on core 0")
             bus_transaction = self.bus.get_transaction()
             bus_actions = self.step(bus_transaction)
             self.bus.create_transaction(bus_actions)
+            # Check all core if they are waiting and if the bus is empty
+            # min_wait_time = sys.maxint
+            # for core in self.cores:
+            #     if core.wait_counter < min_wait_time:
+            #         min_wait_time = core.wait_counter
             self.current_cycle += 1
+            # if min_wait_time < 0 or (not self.bus.queue):
+            #     self.current_cycle += 1
+            # else:
+            #     # TODO update idle cycles for each core
+            #     self.current_cycle += min_wait_time
         
         # log all of the data out
         logging.info(f"Overall Execution Cycle: {self.current_cycle}")
@@ -66,10 +77,10 @@ class Computer:
             logging.info(f"Core {core.core_id} idle cycle count: {core.cache_idle_count}")
         
         for core in self.cores:
-            cache_miss_rate = core.cache.cache_miss_count / (core.cache.cache_hit_count + core.cache.cache_miss_count) if core.cache.cache_hit_count + core.cache.cache_miss_count > 0 else "Zero hits or misses"
+            cache_miss_rate = core.cache.cache_miss_count / (core.load_store_instr_count) if core.load_store_instr_count > 0 else "Zero hits or misses"
             logging.debug(f"{core.core_id} hit is {core.cache.cache_hit_count}" )
             logging.info(f"Core {core.core_id} cache miss rate: {cache_miss_rate}")
-            cache_hit_rate = 1-cache_miss_rate if core.cache.cache_hit_count + core.cache.cache_miss_count > 0 else "Zero hits and misses"
+            cache_hit_rate = 1-cache_miss_rate if core.load_store_instr_count > 0 else "Zero hits and misses"
             logging.info(f"Core {core.core_id} cache hit rate: {cache_hit_rate}")
 
         logging.info(f"Data traffic on bus: {self.bus.data_processed} bytes")
