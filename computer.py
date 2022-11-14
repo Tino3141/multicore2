@@ -1,3 +1,4 @@
+import datetime
 import logging
 import sys
 
@@ -44,21 +45,33 @@ class Computer:
     
     def start(self):
         while not self.is_done():
-            if self.current_cycle % 500000 == 0:
-                logging.debug(f"Current Cycle: {self.current_cycle} and {len(self.cores[0].instr_stream)} instructions left on core 0")
+            if self.current_cycle % 1000000 == 0:
+                logging.debug(f"Time: {datetime.datetime.now()}Current Cycle: {self.current_cycle} and {len(self.cores[0].instr_stream)} instructions left on core 0")
             bus_transaction = self.bus.get_transaction()
             bus_actions = self.step(bus_transaction)
             self.bus.create_transaction(bus_actions)
             # Check all core if they are waiting and if the bus is empty
-            # min_wait_time = sys.maxint
-            # for core in self.cores:
-            #     if core.wait_counter < min_wait_time:
-            #         min_wait_time = core.wait_counter
             self.current_cycle += 1
-            # if min_wait_time < 0 or (not self.bus.queue):
+            # min_wait_time = sys.maxsize
+            # someone_wait = False
+            # for core in self.cores:
+            #     if core.wait_counter>0 and core.wait_counter < min_wait_time:
+            #         min_wait_time = core.wait_counter
+            #         someone_wait = True
+            #     if core.cache.wait_counter >= 0 and core.cache.wait_counter < min_wait_time:
+            #         min_wait_time = core.cache.wait_counter
+            #         someone_wait = True
+                
+
+            # if min_wait_time < 0 or (not self.bus.queue) or (not someone_wait):
             #     self.current_cycle += 1
             # else:
-            #     # TODO update idle cycles for each core
+            #     # # DONE update idle cycles for each core
+            #     print("Jump")
+            #     for core in self.cores:
+            #         core.wait_counter -= min_wait_time
+            #         core.cache.wait_counter -= min_wait_time
+            #     # print(min_wait_time)
             #     self.current_cycle += min_wait_time
         
         # log all of the data out
