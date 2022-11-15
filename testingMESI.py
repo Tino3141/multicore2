@@ -458,7 +458,7 @@ class TestSuite(unittest.TestCase):
         
         instructions = [instr_1, instr_2]
 
-        computer = Computer(instructions, number_cores=2, MESI=False)
+        computer = Computer(instructions, number_cores=2)
         #computer.start()
 
         #self.assertEqual(computer.current_cycle, 302)

@@ -1,11 +1,11 @@
 from bus import BusProtocolInput
-from definitions import DRAGON_ACTIONS, DRAGON_STATES, FLUSH_TIME
+from definitions import DRAGON_ACTIONS, DRAGON_STATES, FLUSH_TIME, PROTOCOLS
 from core import Core
 from cache import Cache
 class CoreDragon(Core):
     def __init__(self, instrStream, block, associativity, cache_size, check_state=lambda x, y: [], core_id=0, cores_cnt=4, check_flush=lambda addr, core_id: False, flush_directory={}) -> None:
         super().__init__(instrStream, block, associativity, cache_size, check_state, core_id, cores_cnt, check_flush=check_flush, flush_directory=flush_directory)
-        self.cache = Cache(block, associativity, cache_size, IS_MESI=False)
+        self.cache = Cache(block, associativity, cache_size, protocol=PROTOCOLS.Dragon)
     def step(self, bus_transaction: BusProtocolInput):
         bus_output = []
 
