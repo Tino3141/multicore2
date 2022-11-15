@@ -1,0 +1,17 @@
+INFO:root:Starting to read file bodytrack_four
+INFO:root:Finished reading file bodytrack_four
+INFO:root:Starting the computer
+DEBUG:root:Time: 2022-11-15 04:19:44.584450Current Cycle: 0 and 6574503 instructions left on core 0
+DEBUG:root:Time: 2022-11-15 04:20:06.129870Current Cycle: 3808640 and 6505521 instructions left on core 0
+DEBUG:root:Time: 2022-11-15 04:20:27.310816Current Cycle: 9463964 and 6400139 instructions left on core 0
+DEBUG:root:Time: 2022-11-15 04:20:47.737022Current Cycle: 15929893 and 6280457 instructions left on core 0
+DEBUG:root:Time: 2022-11-15 04:21:07.979841Current Cycle: 23943499 and 6133899 instructions left on core 0
+DEBUG:root:Time: 2022-11-15 04:21:27.556540Current Cycle: 30196206 and 6021573 instructions left on core 0
+DEBUG:root:Time: 2022-11-15 04:21:46.639735Current Cycle: 37590668 and 5885277 instructions left on core 0
+DEBUG:root:Time: 2022-11-15 04:22:05.859833Current Cycle: 43659176 and 5770961 instructions left on core 0
+DEBUG:root:Time: 2022-11-15 04:22:24.625957Current Cycle: 51687687 and 5621431 instructions left on core 0
+DEBUG:root:Time: 2022-11-15 04:22:43.454436Current Cycle: 58113155 and 5501311 instructions left on core 0
+DEBUG:root:Time: 2022-11-15 04:23:02.186846Current Cycle: 65348998 and 5369429 instructions left on core 0
+DEBUG:root:Time: 2022-11-15 04:23:21.119336Current Cycle: 73400075 and 5220907 instructions left on core 0
+DEBUG:root:Time: 2022-11-15 04:23:39.864370Current Cycle: 75765306 and 5192243 instructions left on core 0
+DEBUG:root:Time: 2022-11-15 04:24:04.913153Current Cycle: 76765306 and 5192243 instructions left on core 0

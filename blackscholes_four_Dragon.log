@@ -1,0 +1,90 @@
+INFO:root:Starting to read file blackscholes_four
+INFO:root:Finished reading file blackscholes_four
+INFO:root:Starting the computer
+DEBUG:root:Time: 2022-11-15 03:29:03.921045Current Cycle: 0 and 5006253 instructions left on core 0
+DEBUG:root:Time: 2022-11-15 03:29:26.085779Current Cycle: 5984178 and 4886757 instructions left on core 0
+DEBUG:root:Time: 2022-11-15 03:29:48.101428Current Cycle: 11867805 and 4766193 instructions left on core 0
+DEBUG:root:Time: 2022-11-15 03:30:10.226125Current Cycle: 17754332 and 4645571 instructions left on core 0
+DEBUG:root:Time: 2022-11-15 03:30:32.360252Current Cycle: 23659339 and 4524497 instructions left on core 0
+DEBUG:root:Time: 2022-11-15 03:30:54.720695Current Cycle: 29550253 and 4403697 instructions left on core 0
+DEBUG:root:Time: 2022-11-15 03:31:16.698284Current Cycle: 35439580 and 4283223 instructions left on core 0
+DEBUG:root:Time: 2022-11-15 03:31:38.585745Current Cycle: 41319660 and 4163047 instructions left on core 0
+DEBUG:root:Time: 2022-11-15 03:32:00.666844Current Cycle: 47201625 and 4042649 instructions left on core 0
+DEBUG:root:Time: 2022-11-15 03:32:23.029970Current Cycle: 53086352 and 3922243 instructions left on core 0
+DEBUG:root:Time: 2022-11-15 03:32:45.280702Current Cycle: 58963161 and 3802243 instructions left on core 0
+DEBUG:root:Time: 2022-11-15 03:33:07.793665Current Cycle: 64811814 and 3682021 instructions left on core 0
+DEBUG:root:Time: 2022-11-15 03:33:30.070028Current Cycle: 70670601 and 3562047 instructions left on core 0
+DEBUG:root:Time: 2022-11-15 03:33:52.232540Current Cycle: 76548626 and 3441503 instructions left on core 0
+DEBUG:root:Time: 2022-11-15 03:34:14.817727Current Cycle: 82430326 and 3321009 instructions left on core 0
+DEBUG:root:Time: 2022-11-15 03:34:37.467847Current Cycle: 88304782 and 3200713 instructions left on core 0
+DEBUG:root:Time: 2022-11-15 03:34:59.869463Current Cycle: 94209177 and 3079909 instructions left on core 0
+DEBUG:root:Time: 2022-11-15 03:35:22.244776Current Cycle: 100108373 and 2959111 instructions left on core 0
+DEBUG:root:Time: 2022-11-15 03:35:44.677265Current Cycle: 105994219 and 2838647 instructions left on core 0
+DEBUG:root:Time: 2022-11-15 03:36:07.212600Current Cycle: 111897853 and 2717819 instructions left on core 0
+DEBUG:root:Time: 2022-11-15 03:36:29.291009Current Cycle: 117783833 and 2597346 instructions left on core 0
+DEBUG:root:Time: 2022-11-15 03:36:51.312139Current Cycle: 123650612 and 2477277 instructions left on core 0
+DEBUG:root:Time: 2022-11-15 03:37:13.368067Current Cycle: 129526407 and 2356691 instructions left on core 0
+DEBUG:root:Time: 2022-11-15 03:37:35.492151Current Cycle: 135385717 and 2236671 instructions left on core 0
+DEBUG:root:Time: 2022-11-15 03:37:57.803394Current Cycle: 141256621 and 2116347 instructions left on core 0
+DEBUG:root:Time: 2022-11-15 03:38:20.082560Current Cycle: 147127267 and 1996037 instructions left on core 0
+DEBUG:root:Time: 2022-11-15 03:38:42.271891Current Cycle: 152999644 and 1875655 instructions left on core 0
+DEBUG:root:Time: 2022-11-15 03:39:05.173158Current Cycle: 158873683 and 1755251 instructions left on core 0
+DEBUG:root:Time: 2022-11-15 03:39:27.876829Current Cycle: 164745536 and 1635077 instructions left on core 0
+DEBUG:root:Time: 2022-11-15 03:39:50.094838Current Cycle: 170623023 and 1514805 instructions left on core 0
+DEBUG:root:Time: 2022-11-15 03:40:12.355223Current Cycle: 176507467 and 1394587 instructions left on core 0
+DEBUG:root:Time: 2022-11-15 03:40:34.692110Current Cycle: 182385547 and 1274319 instructions left on core 0
+DEBUG:root:Time: 2022-11-15 03:40:57.010025Current Cycle: 188261847 and 1154061 instructions left on core 0
+DEBUG:root:Time: 2022-11-15 03:41:19.443395Current Cycle: 194117821 and 1033925 instructions left on core 0
+DEBUG:root:Time: 2022-11-15 03:41:42.012696Current Cycle: 199973805 and 913801 instructions left on core 0
+DEBUG:root:Time: 2022-11-15 03:42:05.390278Current Cycle: 205832853 and 793749 instructions left on core 0
+DEBUG:root:Time: 2022-11-15 03:42:28.405510Current Cycle: 211690881 and 673767 instructions left on core 0
+DEBUG:root:Time: 2022-11-15 03:42:51.227810Current Cycle: 217568589 and 553121 instructions left on core 0
+DEBUG:root:Time: 2022-11-15 03:43:14.753241Current Cycle: 223458759 and 432677 instructions left on core 0
+DEBUG:root:Time: 2022-11-15 03:43:37.541666Current Cycle: 229319448 and 312576 instructions left on core 0
+DEBUG:root:Time: 2022-11-15 03:44:00.436003Current Cycle: 235179490 and 192773 instructions left on core 0
+DEBUG:root:Time: 2022-11-15 03:44:23.543396Current Cycle: 241062384 and 72407 instructions left on core 0
+INFO:root:Overall Execution Cycle: 246571220
+INFO:root:Core 0 cycle: 246487044
+INFO:root:Core 1 cycle: 246422394
+INFO:root:Core 2 cycle: 246346255
+INFO:root:Core 3 cycle: 246571219
+INFO:root:Core 0 compute cycles: 10394904
+INFO:root:Core 1 compute cycles: 10430314
+INFO:root:Core 2 compute cycles: 10383276
+INFO:root:Core 3 compute cycles: 10430338
+INFO:root:Core 0 load/store count: 2503127
+INFO:root:Core 1 load/store count: 2497349
+INFO:root:Core 2 load/store count: 2490468
+INFO:root:Core 3 load/store count: 2509057
+INFO:root:Core 0 idle cycle count: 20803072
+INFO:root:Core 1 idle cycle count: 20816465
+INFO:root:Core 2 idle cycle count: 20821311
+INFO:root:Core 3 idle cycle count: 20697649
+DEBUG:root:0 hit is 2379045
+INFO:root:Core 0 cache miss rate: 0.4897610069325288
+INFO:root:Core 0 cache hit rate: 0.5102389930674712
+DEBUG:root:1 hit is 2348926
+INFO:root:Core 1 cache miss rate: 0.48931887373370725
+INFO:root:Core 1 cache hit rate: 0.5106811262662927
+DEBUG:root:2 hit is 2318978
+INFO:root:Core 2 cache miss rate: 0.48958187778361334
+INFO:root:Core 2 cache hit rate: 0.5104181222163866
+DEBUG:root:3 hit is 2332421
+INFO:root:Core 3 cache miss rate: 0.49255676535048826
+INFO:root:Core 3 cache hit rate: 0.5074432346495117
+INFO:root:Data traffic on bus: 16390172 bytes
+INFO:root:Invalidations or updates on bus: 478
+INFO:root:Core 0 shared access: 107238
+INFO:root:Core 0 private access: 2327152
+INFO:root:Core 0 access distribution (shared / private): 0.04405128184062537
+INFO:root:Core 1 shared access: 107488
+INFO:root:Core 1 private access: 2323259
+INFO:root:Core 1 access distribution (shared / private): 0.04422015125391495
+INFO:root:Core 2 shared access: 107373
+INFO:root:Core 2 private access: 2316168
+INFO:root:Core 2 access distribution (shared / private): 0.04430418136107456
+INFO:root:Core 3 shared access: 106174
+INFO:root:Core 3 private access: 2319257
+INFO:root:Core 3 access distribution (shared / private): 0.04377531251146703
+INFO:root:Logging complete!
+INFO:root:Closing the computer
