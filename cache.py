@@ -55,6 +55,7 @@ class Cache:
             if len(queue) == self.associativity:
                 queue.popleft()
                 # wait time for fetching from main memory
+                self.wait_counter = -1
                 self.add_wait(FETCH_WAIT)
                 return False
             # we need to add to cache
