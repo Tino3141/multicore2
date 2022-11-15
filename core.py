@@ -36,9 +36,9 @@ class Core:
         flush_instr = (3, addr)
 
         # We dont flush the same address again
-        for flush_addr, _ in self.flush_queue:
-            if flush_addr == addr:
-                return
+        # for flush_addr, _ in self.flush_queue:
+        #     if flush_addr == addr:
+        #         return
 
         if addr in self.flush_directory.keys():
             self.flush_directory[addr].append(self.core_id)
