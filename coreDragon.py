@@ -138,6 +138,11 @@ class CoreDragon(Core):
                         self.shared_access += 1
                     elif access_state == DRAGON_STATES.Exclusive or access_state == DRAGON_STATES.Modified:
                         self.private_access += 1
+                
+                # Moved that here
+                if addr in self.bus_read_input.keys():
+                    del self.bus_read_input[addr]
+
                 access_state = self.cache.get_state(addr)
                 # WriteMiss
                 if access_state == DRAGON_STATES.Loaded:
