@@ -1,6 +1,6 @@
 import unittest
 from dragon import Dragon
-from definitions import DRAGON_ACTIONS, DRAGON_STATES
+from definitions import DRAGON_ACTIONS, DRAGON_STATES, PROTOCOLS
 from coreDragon import CoreDragon
 from bus import BusProtocolInput
 from computer import Computer
@@ -158,7 +158,7 @@ class TestSuite(unittest.TestCase):
         
         instructions = [instr_1, instr_2]
 
-        computer = Computer(instructions, number_cores=2, MESI=False)
+        computer = Computer(instructions, number_cores=2, protocol=PROTOCOLS.Dragon)
         computer.start()
 
         self.assertEqual(computer.current_cycle, 302)
@@ -176,7 +176,7 @@ class TestSuite(unittest.TestCase):
 
         instructions = [instr_1, instr_2]
 
-        computer = Computer(instructions, number_cores=2, MESI=False)
+        computer = Computer(instructions, number_cores=2, protocol=PROTOCOLS.Dragon)
         computer.start()
 
         self.assertEqual(computer.current_cycle, 103)
@@ -195,7 +195,7 @@ class TestSuite(unittest.TestCase):
 
         instructions = [instr_1, instr_2]
 
-        computer = Computer(instructions, number_cores=2, MESI=False)
+        computer = Computer(instructions, number_cores=2, protocol=PROTOCOLS.Dragon)
         computer.start()
 
         self.assertEqual(computer.current_cycle, 202)
@@ -213,7 +213,7 @@ class TestSuite(unittest.TestCase):
         ]
         instructions = [instr_1, instr_2]
 
-        computer = Computer(instructions, number_cores=2, MESI=False)
+        computer = Computer(instructions, number_cores=2, protocol=PROTOCOLS.Dragon)
         computer.start()
 
         self.assertEqual(computer.current_cycle, 222)
@@ -233,7 +233,7 @@ class TestSuite(unittest.TestCase):
 
         instructions = [instr_1, instr_2]
 
-        computer = Computer(instructions, number_cores=2, MESI=False)
+        computer = Computer(instructions, number_cores=2, protocol=PROTOCOLS.Dragon)
         computer.start()
 
         self.assertEqual(computer.current_cycle, 216)
@@ -253,7 +253,7 @@ class TestSuite(unittest.TestCase):
 
         instructions = [instr_1, instr_2]
 
-        computer = Computer(instructions, number_cores=2, MESI=False)
+        computer = Computer(instructions, number_cores=2, protocol=PROTOCOLS.Dragon)
         computer.start()
 
         self.assertEqual(computer.current_cycle, 118)
@@ -274,7 +274,7 @@ class TestSuite(unittest.TestCase):
 
         instructions = [instr_1, instr_2]
 
-        computer = Computer(instructions, number_cores=2, MESI=False)
+        computer = Computer(instructions, number_cores=2, protocol=PROTOCOLS.Dragon)
         computer.start()
 
         # self.assertEqual(computer.current_cycle, 123)
@@ -304,7 +304,7 @@ class TestSuite(unittest.TestCase):
 
         instructions = [instr_1, instr_2, instr_3, instr_4]
 
-        computer = Computer(instructions, number_cores=4, MESI=False)
+        computer = Computer(instructions, number_cores=4, protocol=PROTOCOLS.Dragon)
         computer.start()
 
         self.assertEqual(computer.current_cycle, 143)
@@ -333,7 +333,7 @@ class TestSuite(unittest.TestCase):
 
         instructions = [instr_1, instr_2, instr_3, instr_4]
 
-        computer = Computer(instructions, number_cores=4, MESI=False)
+        computer = Computer(instructions, number_cores=4, protocol=PROTOCOLS.Dragon)
         computer.start()
 
         self.assertEqual(computer.current_cycle, 104)
@@ -365,7 +365,7 @@ class TestSuite(unittest.TestCase):
 
         instructions = [instr_1, instr_2, instr_3, instr_4]
 
-        computer = Computer(instructions, number_cores=4, MESI=False)
+        computer = Computer(instructions, number_cores=4, protocol=PROTOCOLS.Dragon)
         computer.start()
 
         self.assertEqual(computer.current_cycle, 215)
@@ -397,7 +397,7 @@ class TestSuite(unittest.TestCase):
 
         instructions = [instr_1, instr_2, instr_3, instr_4]
 
-        computer = Computer(instructions, number_cores=4, MESI=False)
+        computer = Computer(instructions, number_cores=4, protocol=PROTOCOLS.Dragon)
         computer.start()
 
         self.assertEqual(computer.current_cycle, 227)
@@ -426,12 +426,30 @@ class TestSuite(unittest.TestCase):
 
         instructions = [instr_1, instr_2, instr_3, instr_4]
 
-        computer = Computer(instructions, number_cores=4, MESI=False)
+        computer = Computer(instructions, number_cores=4, protocol=PROTOCOLS.Dragon)
         computer.start()
 
         self.assertEqual(computer.current_cycle, 105)
  
+    def test_multi_bug(self):
 
+        instr_1 = [
+            (1, 0x100001),
+            (0, 0x2111)
+            
+        ]
+
+        instr_2 = [
+            (1, 0x2111),           
+            (0, 0x100001),
+        ]
+        
+        instructions = [instr_1, instr_2]
+
+        computer = Computer(instructions, number_cores=2, protocol=PROTOCOLS.Dragon)
+        computer.start()
+
+        self.assertEqual(computer.current_cycle, 66034)
 
 if __name__ == '__main__':
     unittest.main()

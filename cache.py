@@ -1,15 +1,16 @@
 import math
 from collections import deque
-from definitions import PROTOCOL_ACTIONS, PROTOCOL_STATES
+from definitions import PROTOCOL_ACTIONS, PROTOCOL_STATES, PROTOCOLS
 from mesi import MESI
 from dragon import Dragon
+from moesi import MOESI
 
 EVICTION_WAIT = 99
 FETCH_WAIT = 99
 
 class Cache:
-    def __init__(self, block, associativity, cache_size, IS_MESI=True) -> None:
-        self.IS_MESI = IS_MESI
+    def __init__(self, block, associativity, cache_size, protocol=PROTOCOLS.MESI) -> None:
+        self.protocol = protocol
         self.block = block
         self.associativity = associativity
         self.cache_size = cache_size
@@ -58,7 +59,15 @@ class Cache:
                 return False
             # we need to add to cache
             else:
-                cache_entry = (MESI() if self.IS_MESI else Dragon(), tag)
+                cache_entry = None
+                if self.protocol == PROTOCOLS.MESI:
+                    cache_entry = (MESI(), tag)
+                elif self.protocol == PROTOCOLS.Dragon:
+                    cache_entry = (Dragon(), tag)
+                elif self.protocol == PROTOCOLS.MOESI:
+                    cache_entry = (MOESI(), tag)
+                else:
+                    raise "invalid protocol for cache instantation"
                 queue.append(cache_entry)
                 self.decrement_wait()
                 return True

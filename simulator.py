@@ -2,6 +2,7 @@ import os
 import argparse
 import logging
 from computer import Computer
+from definitions import PROTOCOLS
 
 def readFile(dir):
     
@@ -27,7 +28,7 @@ def readFile(dir):
 def main():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("-p", "--protocol", default="MESI", choices=['MESI', 'Dragon'])
+    parser.add_argument("-p", "--protocol", default="MESI", choices=['MESI', 'MOESI', 'Dragon'])
     parser.add_argument("-i", "--input", default="blackscholes_four", choices=['blackscholes_four', 'bodytrack_four', 'fluidanimate_four', 'test_four'])
     parser.add_argument("-c", "--cache", default=1024, type=int)
     parser.add_argument("-a", "--associativity", default=1, type=int)
@@ -43,8 +44,16 @@ def main():
     instructions = readFile("./{}".format(ARGS.input))
 
     logging.info("Finished reading file %s", ARGS.input)
-
-    computer = Computer(instructions, ARGS.block, ARGS.associativity, ARGS.cache,number_cores=4, MESI=ARGS.protocol=="MESI")
+    computer = None
+    if ARGS.protocol == "MESI":
+        computer = Computer(instructions, ARGS.block, ARGS.associativity, ARGS.cache, protocol=PROTOCOLS.MESI)
+    elif ARGS.protocol == "Dragon":
+        computer = Computer(instructions, ARGS.block, ARGS.associativity, ARGS.cache, protocol=PROTOCOLS.Dragon)
+    elif ARGS.protocol == "MOESI":
+        computer = Computer(instructions, ARGS.block, ARGS.associativity, ARGS.cache, protocol=PROTOCOLS.MOESI)
+    else: 
+        raise "Invalid protocol specified"
+        
     logging.info("Starting the computer")
     computer.start()
     logging.info("Closing the computer")

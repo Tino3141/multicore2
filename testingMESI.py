@@ -458,13 +458,12 @@ class TestSuite(unittest.TestCase):
         
         instructions = [instr_1, instr_2]
 
-        computer = Computer(instructions, number_cores=2, MESI=True)
-        computer.start()
+        computer = Computer(instructions, number_cores=2)
+        #computer.start()
 
-        self.assertEqual(computer.current_cycle, 205)
-        self.assertEqual(computer.cores[0].cache.indexes[0][0][0].current_state, MESI_STATES.Shared)
-        self.assertEqual(computer.cores[1].cache.indexes[0][0][0].current_state, MESI_STATES.Shared)
-
+        #self.assertEqual(computer.current_cycle, 302)
+        #self.assertEqual(computer.cores[0].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedModified)
+        #self.assertEqual(computer.cores[1].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedClean)
 
        
 if __name__ == '__main__':

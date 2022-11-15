@@ -5,11 +5,13 @@ import sys
 
 from coreMESI import CoreMESI
 from coreDragon import CoreDragon
+from coreMOESI import CoreMOESI
 from bus import Bus, BusProtocolInput
+from definitions import PROTOCOLS
 
 class Computer:
     
-    def __init__(self, instr, block=16, associativity=1, cache_size=1024, number_cores=2, MESI=True) -> None:
+    def __init__(self, instr, block=16, associativity=1, cache_size=1024, number_cores=4, protocol=PROTOCOLS.MESI) -> None:
 
         # if len(instr) != number_cores:
         #     raise "Wrong number of instructions streams"
@@ -19,10 +21,12 @@ class Computer:
         self.flush_directory = {}
         # Adding the cores
         for i in range(0, number_cores):
-            if MESI:
+            if protocol == PROTOCOLS.MESI:
                 self.cores.append(CoreMESI(instr[i], block, associativity, cache_size, self.check_state, i, cores_cnt=number_cores, check_flush=self.check_flush))
-            else: 
+            elif protocol == PROTOCOLS.Dragon: 
                 self.cores.append(CoreDragon(instr[i], block, associativity, cache_size, self.check_state, i, cores_cnt=number_cores, check_flush=self.check_flush))
+            else:
+                self.cores.append(CoreMOESI(instr[i], block, associativity, cache_size, self.check_state, i, cores_cnt=number_cores, check_flush=self.check_flush))
 
         # Adding the bus
         self.bus = Bus()
