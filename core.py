@@ -44,8 +44,15 @@ class Core:
             self.flush_directory[addr].append(self.core_id)
         else:
             self.flush_directory[addr] = [self.core_id]
-        self.instr_stream.appendleft(flush_instr)
-        self.flush_queue.appendleft((addr, bus_action))
+
+        # Check if first instruction is a flush if so -> complete it and put new flush after that 
+        # Otherwise put at the front
+        if len(self.instr_stream)>0 and self.instr_stream[0][0] == 3:
+            self.instr_stream.insert(1, flush_instr)
+            self.flush_queue.insert(1, (addr, bus_action))
+        else:
+            self.instr_stream.appendleft(flush_instr)
+            self.flush_queue.appendleft((addr, bus_action))
 
     def step():
         raise Exception("Step not implemented")

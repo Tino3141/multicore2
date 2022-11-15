@@ -161,6 +161,8 @@ class CoreDragon(Core):
                 self.compute_cycle_count += cycles
                 self.dec_wait()
         elif instr_type == 3:
+            # always reset wait timer to avoid weird bugs
+            self.cache.wait_counter = -1
             if self.wait_counter < 0:
                 self.wait_counter = -1
                 self.add_wait(FLUSH_TIME) # Addr adds wait time for type 2 instructions (naming issue)

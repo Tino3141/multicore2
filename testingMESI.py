@@ -144,7 +144,7 @@ class TestSuite(unittest.TestCase):
         computer = Computer(instructions, number_cores=2)
         computer.start()
 
-        self.assertEqual(computer.current_cycle, 103)
+        self.assertEqual(computer.current_cycle, 102)
         self.assertEqual(computer.cores[0].cache.indexes[0][0][0].current_state, MESI_STATES.Modified)
         self.assertEqual(computer.cores[1].check_state(0x100001, 1)[0][1],MESI_STATES.Modified)
     
@@ -163,7 +163,7 @@ class TestSuite(unittest.TestCase):
         computer = Computer(instructions, number_cores=2)
         computer.start()
 
-        self.assertEqual(computer.current_cycle, 203)
+        self.assertEqual(computer.current_cycle, 106)
         self.assertEqual(computer.cores[0].cache.indexes[0][0][0].current_state, MESI_STATES.Shared)
         self.assertEqual(computer.cores[1].cache.indexes[0][0][0].current_state, MESI_STATES.Shared)
     
@@ -181,7 +181,7 @@ class TestSuite(unittest.TestCase):
         computer = Computer(instructions, number_cores=2)
         computer.start()
 
-        self.assertEqual(computer.current_cycle, 104)
+        self.assertEqual(computer.current_cycle, 103)
         self.assertEqual(computer.cores[0].cache.indexes[0][0][0].current_state, MESI_STATES.Shared)
         self.assertEqual(computer.cores[1].cache.indexes[0][0][0].current_state, MESI_STATES.Shared)
 
@@ -199,7 +199,7 @@ class TestSuite(unittest.TestCase):
         computer = Computer(instructions, number_cores=2)
         computer.start()
 
-        self.assertEqual(computer.current_cycle, 203)
+        self.assertEqual(computer.current_cycle, 106)
         self.assertEqual(computer.cores[0].cache.indexes[0][0][0].current_state, MESI_STATES.Invalid)
         self.assertEqual(computer.cores[1].cache.indexes[0][0][0].current_state, MESI_STATES.Invalid)
 
@@ -256,7 +256,7 @@ class TestSuite(unittest.TestCase):
         computer = Computer(instructions, number_cores=2)
         computer.start()
 
-        self.assertEqual(computer.current_cycle, 218)
+        self.assertEqual(computer.current_cycle, 205)
         self.assertEqual(computer.cores[0].cache.indexes[0][0][0].current_state, MESI_STATES.Invalid)
         self.assertEqual(computer.cores[1].cache.indexes[0][0][0].current_state, MESI_STATES.Modified)
 
@@ -287,7 +287,7 @@ class TestSuite(unittest.TestCase):
         computer = Computer(instructions, number_cores=4)
         computer.start()
 
-        self.assertEqual(computer.current_cycle, 152)
+        self.assertEqual(computer.current_cycle, 146)
         self.assertEqual(computer.cores[0].cache.indexes[0][0][0].current_state, MESI_STATES.Shared)
         self.assertEqual(computer.cores[1].cache.indexes[0][0][0].current_state, MESI_STATES.Shared)
         self.assertEqual(computer.cores[2].cache.indexes[0][0][0].current_state, MESI_STATES.Shared)
@@ -316,7 +316,7 @@ class TestSuite(unittest.TestCase):
         computer = Computer(instructions, number_cores=4)
         computer.start()
 
-        self.assertEqual(computer.current_cycle, 105)
+        self.assertEqual(computer.current_cycle, 104)
         self.assertEqual(computer.cores[0].cache.indexes[0][0][0].current_state, MESI_STATES.Shared)
         self.assertEqual(computer.cores[1].cache.indexes[0][0][0].current_state, MESI_STATES.Shared)
         self.assertEqual(computer.cores[2].cache.indexes[0][0][0].current_state, MESI_STATES.Shared)
@@ -380,7 +380,7 @@ class TestSuite(unittest.TestCase):
         computer = Computer(instructions, number_cores=4)
         computer.start()
 
-        self.assertEqual(computer.current_cycle, 219)
+        self.assertEqual(computer.current_cycle, 121)
         self.assertEqual(computer.cores[0].cache.indexes[0][0][0].current_state, MESI_STATES.Shared)
         self.assertEqual(computer.cores[1].cache.indexes[0][0][0].current_state, MESI_STATES.Shared)
         self.assertEqual(computer.cores[2].cache.indexes[0][0][0].current_state, MESI_STATES.Shared)
@@ -441,8 +441,30 @@ class TestSuite(unittest.TestCase):
         computer = Computer(instructions, number_cores=4)
         computer.start()
 
-        self.assertEqual(computer.current_cycle, 106)
+        self.assertEqual(computer.current_cycle, 105)
    
+    def test_multi_simple_bug(self):
+
+        instr_1 = [
+            (1, 0x100001),
+            (0, 0x2111)
+            
+        ]
+
+        instr_2 = [
+            (1, 0x2111),           
+            (0, 0x100001),
+        ]
+        
+        instructions = [instr_1, instr_2]
+
+        computer = Computer(instructions, number_cores=2, MESI=True)
+        computer.start()
+
+        self.assertEqual(computer.current_cycle, 205)
+        self.assertEqual(computer.cores[0].cache.indexes[0][0][0].current_state, MESI_STATES.Shared)
+        self.assertEqual(computer.cores[1].cache.indexes[0][0][0].current_state, MESI_STATES.Shared)
+
 
        
 if __name__ == '__main__':

@@ -143,7 +143,7 @@ class TestSuite(unittest.TestCase):
         self.assertEqual(computer.cores[0].cache.indexes[0][0][0].current_state, DRAGON_STATES.Modified)
 
     
-    def test_multi_simple(self):
+    def test_multi_simple_bug(self):
 
         instr_1 = [
             (1, 0x100001),
