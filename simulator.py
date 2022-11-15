@@ -13,7 +13,6 @@ def readFile(dir):
         instrList = []
         with open(dir+"/"+file_name, "r") as f:
             lines = f.readlines()
-            print(len(lines))
             for line in lines:
                 words = line.split()
                 
