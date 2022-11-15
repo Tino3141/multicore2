@@ -35,7 +35,7 @@ def main():
     
     ARGS = parser.parse_args()
 
-    log_file = f"{ARGS.input}.log"
+    log_file = f"{ARGS.input}_{ARGS.protocol}.log"
     logging.basicConfig(level=logging.DEBUG, filename=log_file, filemode='w')
     logging.info("Starting to read file %s", ARGS.input)
 
