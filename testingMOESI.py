@@ -97,7 +97,7 @@ class TestSuite(unittest.TestCase):
             core.step(test_bus_input)
             current_cycle += 1
 
-        self.assertEqual(current_cycle, 601)
+        self.assertEqual(current_cycle, 599)
     def test_wait_type2(self):
         instructions = [
             (2, 0x5),
@@ -128,7 +128,7 @@ class TestSuite(unittest.TestCase):
             core.step(test_bus_input)
             current_cycle += 1
 
-        self.assertEqual(current_cycle, 411)
+        self.assertEqual(current_cycle, 410)
     
     def test_check_state(self):
 
@@ -144,7 +144,7 @@ class TestSuite(unittest.TestCase):
         computer = Computer(instructions, number_cores=2, protocol=PROTOCOLS.MOESI)
         computer.start()
 
-        self.assertEqual(computer.current_cycle, 103)
+        self.assertEqual(computer.current_cycle, 102)
         self.assertEqual(computer.cores[0].cache.indexes[0][0][0].current_state, MOESI_STATES.Modified)
         self.assertEqual(computer.cores[1].check_state(0x100001, 1)[0][1],MOESI_STATES.Modified)
     
@@ -163,7 +163,7 @@ class TestSuite(unittest.TestCase):
         computer = Computer(instructions, number_cores=2, protocol=PROTOCOLS.MOESI)
         computer.start()
 
-        self.assertEqual(computer.current_cycle, 203)
+        self.assertEqual(computer.current_cycle, 202)
         self.assertEqual(computer.cores[0].cache.indexes[0][0][0].current_state, MOESI_STATES.Owned)
         self.assertEqual(computer.cores[1].cache.indexes[0][0][0].current_state, MOESI_STATES.Shared)
 
@@ -181,7 +181,7 @@ class TestSuite(unittest.TestCase):
         computer = Computer(instructions, number_cores=2, protocol=PROTOCOLS.MOESI)
         computer.start()
 
-        self.assertEqual(computer.current_cycle, 104)
+        self.assertEqual(computer.current_cycle, 103)
         self.assertEqual(computer.cores[0].cache.indexes[0][0][0].current_state, MOESI_STATES.Shared)
         self.assertEqual(computer.cores[1].cache.indexes[0][0][0].current_state, MOESI_STATES.Shared)
 
@@ -199,7 +199,7 @@ class TestSuite(unittest.TestCase):
         computer = Computer(instructions, number_cores=2, protocol=PROTOCOLS.MOESI)
         computer.start()
 
-        self.assertEqual(computer.current_cycle, 203)
+        self.assertEqual(computer.current_cycle, 201)
         self.assertEqual(computer.cores[0].cache.indexes[0][0][0].current_state, MOESI_STATES.Invalid)
         self.assertEqual(computer.cores[1].cache.indexes[0][0][0].current_state, MOESI_STATES.Invalid)
 
@@ -277,7 +277,7 @@ class TestSuite(unittest.TestCase):
         computer = Computer(instructions, number_cores=2, protocol=PROTOCOLS.MOESI)
         computer.start()
 
-        self.assertEqual(computer.current_cycle, 232)
+        self.assertEqual(computer.current_cycle, 162)
         self.assertEqual(computer.cores[0].cache.indexes[0][0][0].current_state, MOESI_STATES.Invalid)
         self.assertEqual(computer.cores[1].cache.indexes[0][0][0].current_state, MOESI_STATES.Modified)
 
@@ -307,7 +307,7 @@ class TestSuite(unittest.TestCase):
         computer = Computer(instructions, number_cores=4, protocol=PROTOCOLS.MOESI)
         computer.start()
 
-        self.assertEqual(computer.current_cycle, 152)
+        self.assertEqual(computer.current_cycle, 146)
         self.assertEqual(computer.cores[0].cache.indexes[0][0][0].current_state, MOESI_STATES.Shared)
         self.assertEqual(computer.cores[1].cache.indexes[0][0][0].current_state, MOESI_STATES.Shared)
         self.assertEqual(computer.cores[2].cache.indexes[0][0][0].current_state, MOESI_STATES.Shared)
@@ -336,7 +336,7 @@ class TestSuite(unittest.TestCase):
         computer = Computer(instructions, number_cores=4, protocol=PROTOCOLS.MOESI)
         computer.start()
 
-        self.assertEqual(computer.current_cycle, 105)
+        self.assertEqual(computer.current_cycle, 104)
         self.assertEqual(computer.cores[0].cache.indexes[0][0][0].current_state, MOESI_STATES.Shared)
         self.assertEqual(computer.cores[1].cache.indexes[0][0][0].current_state, MOESI_STATES.Shared)
         self.assertEqual(computer.cores[2].cache.indexes[0][0][0].current_state, MOESI_STATES.Shared)
@@ -368,7 +368,7 @@ class TestSuite(unittest.TestCase):
         computer = Computer(instructions, number_cores=4, protocol=PROTOCOLS.MOESI)
         computer.start()
 
-        self.assertEqual(computer.current_cycle, 203)
+        self.assertEqual(computer.current_cycle, 396)
         self.assertEqual(computer.cores[0].cache.indexes[0][0][0].current_state, MOESI_STATES.Owned)
         self.assertEqual(computer.cores[1].cache.indexes[0][0][0].current_state, MOESI_STATES.Shared)
         self.assertEqual(computer.cores[2].cache.indexes[0][0][0].current_state, MOESI_STATES.Shared)
@@ -429,7 +429,7 @@ class TestSuite(unittest.TestCase):
         computer = Computer(instructions, number_cores=4, protocol=PROTOCOLS.MOESI)
         computer.start()
 
-        self.assertEqual(computer.current_cycle, 106)
+        self.assertEqual(computer.current_cycle, 105)
  
 
 
