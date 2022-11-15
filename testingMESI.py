@@ -443,6 +443,27 @@ class TestSuite(unittest.TestCase):
 
         self.assertEqual(computer.current_cycle, 106)
    
+    def test_multi_simple_bug(self):
+
+        instr_1 = [
+            (1, 0x100001),
+            (0, 0x2111)
+            
+        ]
+
+        instr_2 = [
+            (1, 0x2111),           
+            (0, 0x100001),
+        ]
+        
+        instructions = [instr_1, instr_2]
+
+        computer = Computer(instructions, number_cores=2, MESI=False)
+        #computer.start()
+
+        #self.assertEqual(computer.current_cycle, 302)
+        #self.assertEqual(computer.cores[0].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedModified)
+        #self.assertEqual(computer.cores[1].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedClean)
 
        
 if __name__ == '__main__':

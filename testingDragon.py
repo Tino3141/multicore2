@@ -404,7 +404,25 @@ class TestSuite(unittest.TestCase):
 
         self.assertEqual(computer.current_cycle, 110)
  
+    def test_multi_bug(self):
 
+        instr_1 = [
+            (1, 0x100001),
+            (0, 0x2111)
+            
+        ]
+
+        instr_2 = [
+            (1, 0x2111),           
+            (0, 0x100001),
+        ]
+        
+        instructions = [instr_1, instr_2]
+
+        computer = Computer(instructions, number_cores=2, MESI=False)
+        computer.start()
+
+        self.assertEqual(computer.current_cycle, 66034)
 
 if __name__ == '__main__':
     unittest.main()
