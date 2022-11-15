@@ -124,6 +124,7 @@ class CoreDragon(Core):
                         return bus_output
                     if state == DRAGON_STATES.Exclusive or state == DRAGON_STATES.Modified:
                         return bus_output
+                    
                 
                 # Check if someone else is in SharedModfied; if yes then we wait until he moved to shared clean
                 for _, state in other_cores:
@@ -139,6 +140,10 @@ class CoreDragon(Core):
                     elif access_state == DRAGON_STATES.Exclusive or access_state == DRAGON_STATES.Modified:
                         self.private_access += 1
                 access_state = self.cache.get_state(addr)
+                # Moved that here
+                if addr in self.bus_read_input.keys():
+                    del self.bus_read_input[addr]    
+                
                 # WriteMiss
                 if access_state == DRAGON_STATES.Loaded:
                    
