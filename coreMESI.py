@@ -86,6 +86,7 @@ class CoreMESI(Core):
                 self.load_store_instr_count += 1
         elif instr_type == 2:
             if self.wait_counter < 0:
+                self.wait_counter = -1
                 self.add_wait(addr) # Addr adds wait time for type 2 instructions (naming issue)
             elif self.wait_counter > 0:
                 self.dec_wait()
@@ -96,6 +97,7 @@ class CoreMESI(Core):
         elif instr_type == 3:
             self.cache.wait_counter = -1
             if self.wait_counter < 0:
+                self.wait_counter = -1
                 self.add_wait(FLUSH_TIME) # Addr adds wait time for type 2 instructions (naming issue)
             elif self.wait_counter > 0:
                 self.dec_wait()

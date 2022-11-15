@@ -73,6 +73,7 @@ class Computer:
                 for core in self.cores:
                     core.wait_counter -= min_wait_time
                     core.cache.wait_counter -= min_wait_time
+                    core.cycle_count += min_wait_time - 1
             else:
                 #print("No jump")
                 self.current_cycle += 1
