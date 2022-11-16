@@ -1,16 +1,30 @@
 {
     "configurations": [
-      {
+        {
           "type": "python",
           "name": "Simulator",
           "arguments": ["simulator.py", "-p", "Dragon"],
-      },
+        },
         {
             "type": "python-tests",
             "name": "Dragon-Tests",
             "testFramework": "unittest",
             "arguments": [],
             "target": "testingDragon",
+        },
+        {
+            "type": "python-tests",
+            "name": "MESI-Tests",
+            "testFramework": "unittest",
+            "arguments": [],
+            "target": "testingMESI",
+        },
+        {
+            "type": "python-tests",
+            "name": "MOESI-Tests",
+            "testFramework": "unittest",
+            "arguments": [],
+            "target": "testingMOESI",
         }
     ]
 }
