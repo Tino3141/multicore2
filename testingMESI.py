@@ -199,9 +199,9 @@ class TestSuite(unittest.TestCase):
         computer = Computer(instructions, number_cores=2)
         computer.start()
 
-        self.assertEqual(computer.current_cycle, 201)
+        self.assertEqual(computer.current_cycle, 109)
         self.assertEqual(computer.cores[0].cache.indexes[0][0][0].current_state, MESI_STATES.Invalid)
-        self.assertEqual(computer.cores[1].cache.indexes[0][0][0].current_state, MESI_STATES.Invalid)
+        self.assertEqual(computer.cores[1].cache.indexes[0][0][0].current_state, MESI_STATES.Modified)
 
     def test_multi_write_2(self):
         instr_1 = [
@@ -256,7 +256,7 @@ class TestSuite(unittest.TestCase):
         computer = Computer(instructions, number_cores=2)
         computer.start()
 
-        self.assertEqual(computer.current_cycle, 216)
+        self.assertEqual(computer.current_cycle, 124)
         self.assertEqual(computer.cores[0].cache.indexes[0][0][0].current_state, MESI_STATES.Invalid)
         self.assertEqual(computer.cores[1].cache.indexes[0][0][0].current_state, MESI_STATES.Modified)
 
@@ -459,9 +459,9 @@ class TestSuite(unittest.TestCase):
         instructions = [instr_1, instr_2]
 
         computer = Computer(instructions, number_cores=2)
-        #computer.start()
+        computer.start()
 
-        #self.assertEqual(computer.current_cycle, 302)
+        self.assertEqual(computer.current_cycle, 302)
         #self.assertEqual(computer.cores[0].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedModified)
         #self.assertEqual(computer.cores[1].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedClean)
 

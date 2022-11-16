@@ -70,7 +70,24 @@ class CoreMESI(Core):
                 self.instr_stream.popleft()
                 self.load_store_instr_count += 1
         # Instr Write Case
-        elif instr_type == 1: 
+        elif instr_type == 1:
+
+            other_core_states = self.check_state(addr, self.core_id)
+            someone_has_copy = False
+            for _, state in other_core_states:
+                if state != MESI_STATES.Invalid:
+                    someone_has_copy = True
+                    # on the first instance push onto bus, else nothing
+                    if addr not in self.bus_read_input.keys():
+                        # this is first instance push on bus and add to dict
+                        bus_output.append(BusProtocolInput(MESI_ACTIONS.BusRdx, self.core_id, addr))
+                        self.bus_read_input[addr] = True
+                    return bus_output
+
+            # Del Key from BusReadInput
+            if addr in self.bus_read_input.keys():
+                del self.bus_read_input[addr]
+
             if self.cache.update_cache(addr):
                 # access analysis
                 access_state = self.cache.get_state(addr)
