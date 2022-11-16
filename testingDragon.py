@@ -65,7 +65,7 @@ class TestSuite(unittest.TestCase):
         while not core.terminated:
             core.step(test_bus_input)
             current_cycle += 1
-        
+
         self.assertEqual(current_cycle, 103)
         self.assertEqual(core.cache.indexes[0][0][0].current_state, DRAGON_STATES.Modified)
 
@@ -368,7 +368,7 @@ class TestSuite(unittest.TestCase):
         computer = Computer(instructions, number_cores=4, protocol=PROTOCOLS.Dragon)
         computer.start()
 
-        self.assertEqual(computer.current_cycle, 413)
+        self.assertEqual(computer.current_cycle, 215)
         self.assertEqual(computer.cores[1].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedClean)
         self.assertEqual(computer.cores[2].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedClean)
         self.assertEqual(computer.cores[0].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedModified)
@@ -400,7 +400,7 @@ class TestSuite(unittest.TestCase):
         computer = Computer(instructions, number_cores=4, protocol=PROTOCOLS.Dragon)
         computer.start()
 
-        self.assertEqual(computer.current_cycle, 412)
+        self.assertEqual(computer.current_cycle, 227)
         self.assertEqual(computer.cores[0].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedClean)
         self.assertEqual(computer.cores[1].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedClean)
         self.assertEqual(computer.cores[2].cache.indexes[0][0][0].current_state, DRAGON_STATES.SharedClean)

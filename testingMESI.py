@@ -380,7 +380,7 @@ class TestSuite(unittest.TestCase):
         computer = Computer(instructions, number_cores=4)
         computer.start()
 
-        self.assertEqual(computer.current_cycle, 305)
+        self.assertEqual(computer.current_cycle, 124)
         self.assertEqual(computer.cores[0].cache.indexes[0][0][0].current_state, MESI_STATES.Shared)
         self.assertEqual(computer.cores[1].cache.indexes[0][0][0].current_state, MESI_STATES.Shared)
         self.assertEqual(computer.cores[2].cache.indexes[0][0][0].current_state, MESI_STATES.Shared)

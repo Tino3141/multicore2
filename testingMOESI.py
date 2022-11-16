@@ -368,7 +368,7 @@ class TestSuite(unittest.TestCase):
         computer = Computer(instructions, number_cores=4, protocol=PROTOCOLS.MOESI)
         computer.start()
 
-        self.assertEqual(computer.current_cycle, 396)
+        self.assertEqual(computer.current_cycle, 198)
         self.assertEqual(computer.cores[0].cache.indexes[0][0][0].current_state, MOESI_STATES.Owned)
         self.assertEqual(computer.cores[1].cache.indexes[0][0][0].current_state, MOESI_STATES.Shared)
         self.assertEqual(computer.cores[2].cache.indexes[0][0][0].current_state, MOESI_STATES.Shared)
