@@ -1,0 +1,16 @@
+{
+    "configurations": [
+      {
+          "type": "python",
+          "name": "Simulator",
+          "arguments": ["simulator.py", "-p", "Dragon"],
+      },
+        {
+            "type": "python-tests",
+            "name": "Dragon-Tests",
+            "testFramework": "unittest",
+            "arguments": [],
+            "target": "testingDragon",
+        }
+    ]
+}
