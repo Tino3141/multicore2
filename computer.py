@@ -1,6 +1,5 @@
 import datetime
 import logging
-import math
 import sys
 
 from coreMESI import CoreMESI
@@ -12,13 +11,10 @@ from definitions import PROTOCOLS
 class Computer:
     
     def __init__(self, instr, block=16, associativity=1, cache_size=1024, number_cores=4, protocol=PROTOCOLS.MESI) -> None:
-
-        # if len(instr) != number_cores:
-        #     raise "Wrong number of instructions streams"
-        
         self.cores = []
         self.current_cycle = 0
         self.flush_directory = {}
+
         # Adding the cores
         for i in range(0, number_cores):
             if protocol == PROTOCOLS.MESI:
@@ -57,10 +53,9 @@ class Computer:
             bus_transaction = self.bus.get_transaction()
             bus_actions = self.step(bus_transaction)
             self.bus.create_transaction(bus_actions)
-            # Check all core if they are waiting and if the bus is empty
-            # self.current_cycle += 1
             min_wait_time = sys.maxsize
             all_wait = True
+
             for core in self.cores:
                 if core.wait_counter>=0 and core.wait_counter < min_wait_time:
                     min_wait_time = min(core.wait_counter, min_wait_time) 
@@ -71,9 +66,7 @@ class Computer:
                     all_wait = False
             
             if all_wait and (not self.bus.queue) and (not self.is_done()):
-                # print(f"Jump by {min_wait_time}")
                 self.current_cycle += min_wait_time
-                #print(f"Jump: {min_wait_time}")
                 for core in self.cores:
                     if core.wait_counter > -1:
                         core.wait_counter -= min_wait_time
@@ -81,22 +74,8 @@ class Computer:
                         core.cache.wait_counter -= min_wait_time
                     core.cycle_count += min_wait_time - 1
             else:
-                #print("No jump")
                 self.current_cycle += 1
-            
                 
-
-            # if min_wait_time < 0 or (not self.bus.queue) or (not someone_wait):
-            #     self.current_cycle += 1
-            # else:
-            #     # # DONE update idle cycles for each core
-            #     print("Jump")
-            #     for core in self.cores:
-            #         core.wait_counter -= min_wait_time
-            #         core.cache.wait_counter -= min_wait_time
-            #     # print(min_wait_time)
-            #     self.current_cycle += min_wait_time
-        
         # log all of the data out
         logging.info(f"Overall Execution Cycle: {self.current_cycle}")
 
@@ -142,7 +121,6 @@ class Computer:
     # core is asking core, not searching core !Core is no longer required as a parameter!
     def check_flush(self, addr, core):
         # Check directory if it contains a flush matching the address and from a different core
-        # {addr: []}
         if addr in self.flush_directory.keys() and len(self.flush_directory[addr]) > 0:
             return True
         return False

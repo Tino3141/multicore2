@@ -1,5 +1,4 @@
 from collections import deque
-# from definitions import MESI_ACTIONS
 from definitions import DRAGON_ACTIONS, MESI_ACTIONS, PROTOCOL_ACTIONS
 
 BYTES_PER_WORD = 4

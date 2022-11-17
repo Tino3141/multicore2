@@ -37,25 +37,10 @@ class CoreDragon(Core):
 
         # Instr Read Case
         if instr_type == 0:
-            # other_cores_states = self.check_state(addr, self.core_id)
-            # someone_has_copy = False
-            
-            # for _, state in other_cores_states:
-            #     if state != DRAGON_STATES.Invalid:
-            #         someone_has_copy = True
-            #     if state == DRAGON_STATES.Modified or state == DRAGON_STATES.Exclusive:
-            #         if addr not in self.bus_read_input.keys():
-            #             bus_output.append(BusProtocolInput(DRAGON_ACTIONS.BusRd, self.core_id, addr))
-            #             self.bus_read_input[addr] = True
-            #         return bus_output
-                # check if the flush state didn't change for others. then
-            
             self.cache_idle_count += 1
 
             if self.check_flush(addr, self.core_id):
                 return bus_output
-           
-
 
             if (self.cache.update_cache(addr)):
                 self.cache_idle_count -= 1
@@ -83,34 +68,13 @@ class CoreDragon(Core):
                 
                 if access_state == DRAGON_STATES.Loaded:
                     bus_action = self.cache.update_state(addr, DRAGON_ACTIONS.PrRdMiss, someone_has_copy=someone_has_copy)
-                   # bus_output.append(BusProtocolInput(bus_action, self.core_id, addr))
-
                 else:
                     bus_action = self.cache.update_state(addr, DRAGON_ACTIONS.PrRd, someone_has_copy=someone_has_copy)
-                    #bus_output.append(BusProtocolInput(bus_action, self.core_id, addr))
                     
                 self.instr_stream.popleft()
                 self.load_store_instr_count += 1
         # Inst Write Case
         elif instr_type == 1:
-            # other_cores = self.check_state(addr, self.core_id)
-            # someone_has_copy = False
-            # for _, state in other_cores:
-            #     if state != DRAGON_STATES.Invalid:
-            #         someone_has_copy = True
-            #     if state == DRAGON_STATES.Exclusive or state == DRAGON_STATES.Modified:
-            #         if addr not in self.bus_read_input.keys():
-            #             bus_output.append(BusProtocolInput(DRAGON_ACTIONS.BusRd, self.core_id, addr))
-            #             self.bus_read_input[addr] = True
-            #         return bus_output
-            
-            # # Check if someone else is in SharedModfied; if yes then we wait until he moved to shared clean
-            # for _, state in other_cores:
-            #     if state == DRAGON_STATES.SharedModified:
-            #         # Create new BusTransaction
-            #         self.bus_read_input[addr] = True
-            #         bus_output.append(BusProtocolInput(DRAGON_ACTIONS.BusUpd, self.core_id, addr))
-            #         return bus_output
             if self.isLoadingFirstTime():
                 self.load_store_to_main += 1
             if self.cache.update_cache(addr):
@@ -151,11 +115,9 @@ class CoreDragon(Core):
                 if access_state == DRAGON_STATES.Loaded:
                    
                     bus_action = self.cache.update_state(addr, DRAGON_ACTIONS.PrWrMiss, someone_has_copy=someone_has_copy)
-                    #bus_output.append(BusProtocolInput(bus_action, self.core_id, addr))
                 # WriteHit
                 else:
                     bus_action = self.cache.update_state(addr, DRAGON_ACTIONS.PrWr, someone_has_copy=someone_has_copy)
-                    #bus_output.append(BusProtocolInput(bus_action, self.core_id, addr))
                 self.instr_stream.popleft()
                 self.loading = False
                 self.load_store_instr_count += 1
@@ -171,7 +133,6 @@ class CoreDragon(Core):
                 self.dec_wait()
         elif instr_type == 3:
             # always reset wait timer to avoid weird bugs
-            # self.cache.wait_counter = -1
             if self.wait_counter < 0:
                 self.wait_counter = -1
                 self.load_store_to_main += 1

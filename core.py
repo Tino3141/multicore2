@@ -1,10 +1,5 @@
-from audioop import add
 from collections import deque
-from bus import BusProtocolInput
 from cache import Cache
-from definitions import MESI_ACTIONS, MESI_STATES
-from mesi import MESI
-
 
 class Core:
     def __init__(self, instrStream, block, associativity, cache_size, check_state=lambda x, y: [], core_id=0, cores_cnt=4, check_flush= lambda addr, core_id: False, flush_directory={}) -> None:

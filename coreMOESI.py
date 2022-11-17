@@ -40,8 +40,6 @@ class CoreMOESI(Core):
                 current_state = self.cache.get_state(bus_transaction.address)
                 if len(self.instr_stream) != 0 and self.instr_stream[0] == (0, bus_transaction.address) and (current_state == MOESI_STATES.Exclusive or current_state == MOESI_STATES.Shared):
                     self.instr_stream.popleft()
-                    # TODO: add metric calculation here if needed
-                    # successfully snooped the cache pop and return. 
                     return bus_output
             else:
                 raise Exception("Invalid Bus transaction input to core " + str(bus_transaction.action))

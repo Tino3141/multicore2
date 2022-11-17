@@ -82,7 +82,6 @@ class Cache:
             
             # Cache Miss
             self.cache_miss_count += 1
-            # self.cache_hit_count -= 1 # to counter the future hit increment
 
             if len(queue) == self.associativity:
                 # wait time for evicting

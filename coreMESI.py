@@ -115,7 +115,6 @@ class CoreMESI(Core):
                 self.compute_cycle_count += cycles
                 self.dec_wait()
         elif instr_type == 3:
-            # self.cache.wait_counter = -1
             if self.wait_counter < 0:
                 self.wait_counter = -1
                 self.load_store_to_main += 1
