@@ -222,7 +222,7 @@ class TestSuite(unittest.TestCase):
         self.assertEqual(computer.cores[0].cache.indexes[0][0][0].current_state, MOESI_STATES.Invalid)
         self.assertEqual(computer.cores[1].cache.indexes[0][0][0].current_state, MOESI_STATES.Modified)
 
-    def test_multi_write_read(self):
+    def test_multi_write_read_flush_inter(self):
         instr_1 = [
             (1, 0x100001)
         ]
@@ -237,29 +237,11 @@ class TestSuite(unittest.TestCase):
         computer = Computer(instructions, number_cores=2, protocol=PROTOCOLS.MOESI)
         computer.start()
 
-        self.assertEqual(computer.current_cycle, 203)
+        self.assertEqual(computer.current_cycle, 200)
         self.assertEqual(computer.cores[0].cache.indexes[0][0][0].current_state, MOESI_STATES.Owned)
         self.assertEqual(computer.cores[1].cache.indexes[0][0][0].current_state, MOESI_STATES.Shared)
 
-    def test_multi_write_read(self):
-        instr_1 = [
-            (0, 0x100001)
-        ]
-
-        instr_2 = [
-            (2, 0x10),
-            (1, 0x100001)
-        ]
-
-        instructions = [instr_1, instr_2]
-
-        computer = Computer(instructions, number_cores=2, protocol=PROTOCOLS.MOESI)
-        computer.start()
-
-        self.assertEqual(computer.current_cycle, 218)
-        self.assertEqual(computer.cores[0].cache.indexes[0][0][0].current_state, MOESI_STATES.Invalid)
-        self.assertEqual(computer.cores[1].cache.indexes[0][0][0].current_state, MOESI_STATES.Modified)
-
+    
     def test_multi_write_read(self):
         instr_1 = [
             (1, 0x100001),
@@ -368,7 +350,7 @@ class TestSuite(unittest.TestCase):
         computer = Computer(instructions, number_cores=4, protocol=PROTOCOLS.MOESI)
         computer.start()
 
-        self.assertEqual(computer.current_cycle, 198)
+        self.assertEqual(computer.current_cycle, 199)
         self.assertEqual(computer.cores[0].cache.indexes[0][0][0].current_state, MOESI_STATES.Owned)
         self.assertEqual(computer.cores[1].cache.indexes[0][0][0].current_state, MOESI_STATES.Shared)
         self.assertEqual(computer.cores[2].cache.indexes[0][0][0].current_state, MOESI_STATES.Shared)

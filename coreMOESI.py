@@ -38,8 +38,11 @@ class CoreMOESI(Core):
                     self.cache.update_state(bus_transaction.address, bus_transaction.action)
             elif bus_transaction.action == MOESI_ACTIONS.Flush:
                 current_state = self.cache.get_state(bus_transaction.address)
-                if len(self.instr_stream) != 0 and self.instr_stream[0] == (0, bus_transaction.address) and (current_state == MOESI_STATES.Exclusive or current_state == MOESI_STATES.Shared):
-                    self.instr_stream.popleft()
+                if len(self.instr_stream) != 0 and self.instr_stream[0] == (0, bus_transaction.address):
+                    # Reset counter to 0 s.t. it appears as it is done fetching
+                    self.cache.wait_counter = 0
+                    # Decrement load-store-to-main
+                    self.load_store_to_main -= 1
                     return bus_output
             else:
                 raise Exception("Invalid Bus transaction input to core " + str(bus_transaction.action))
