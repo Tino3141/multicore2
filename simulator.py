@@ -44,6 +44,12 @@ def main():
     instructions = readFile("./{}".format(ARGS.input))
 
     logging.info("Finished reading file %s", ARGS.input)
+    logging.info("Computer Config:")
+    logging.info(f"Protocol: {ARGS.protocol}")
+    logging.info(f"Input: {ARGS.input}")
+    logging.info(f"Associativity: {ARGS.associativity}")
+    logging.info(f"Block: {ARGS.block}")
+    logging.info(f"Cache Size: {ARGS.cache}")
     computer = None
     if ARGS.protocol == "MESI":
         computer = Computer(instructions, ARGS.block, ARGS.associativity, ARGS.cache, protocol=PROTOCOLS.MESI)

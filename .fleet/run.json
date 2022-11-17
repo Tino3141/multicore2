@@ -3,7 +3,7 @@
         {
           "type": "python",
           "name": "Simulator",
-          "arguments": ["simulator.py", "-p", "Dragon"],
+          "arguments": ["simulator.py", "-p", "MESI", "-i", "fluidanimate_four", "-a", "4"],
         },
         {
             "type": "python-tests",

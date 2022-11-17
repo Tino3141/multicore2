@@ -451,5 +451,25 @@ class TestSuite(unittest.TestCase):
 
         self.assertEqual(computer.current_cycle, 302)
 
+    def test_faster_than_mesi(self):
+        instr_1 = [
+            (1, 0x100001),
+            (2, 0x10),
+            (1, 0x100001)
+        ]
+
+        instr_2 = [
+            (2, 0x10),
+            (1, 0x100001),
+            (1, 0x100001),
+        ]
+
+        instructions = [instr_1, instr_2]
+
+        computer = Computer(instructions, number_cores=2, protocol=PROTOCOLS.Dragon)
+        computer.start()
+
+        self.assertEqual(computer.current_cycle, 220)
+
 if __name__ == '__main__':
     unittest.main()

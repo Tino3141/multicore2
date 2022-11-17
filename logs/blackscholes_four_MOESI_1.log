@@ -1,0 +1,52 @@
+INFO:root:Starting to read file blackscholes_four
+INFO:root:Finished reading file blackscholes_four
+INFO:root:Computer Config:
+INFO:root:Protocol: MOESI
+INFO:root:Input: blackscholes_four
+INFO:root:Associativity: 4
+INFO:root:Block: 32
+INFO:root:Cache Size: 1024
+INFO:root:Starting the computer
+DEBUG:root:Time: 2022-11-17 19:24:13.201443Current Cycle: 0 and 5018113 instructions left on core 0
+DEBUG:root:Time: 2022-11-17 19:24:33.129157Current Cycle: 8504105 and 4909807 instructions left on core 0
+DEBUG:root:Time: 2022-11-17 19:24:53.433006Current Cycle: 17134593 and 4800199 instructions left on core 0
+DEBUG:root:Time: 2022-11-17 19:25:13.338314Current Cycle: 25753227 and 4690609 instructions left on core 0
+DEBUG:root:Time: 2022-11-17 19:25:32.606542Current Cycle: 34382019 and 4580867 instructions left on core 0
+DEBUG:root:Time: 2022-11-17 19:25:53.118193Current Cycle: 43021604 and 4471113 instructions left on core 0
+DEBUG:root:Time: 2022-11-17 19:26:14.797264Current Cycle: 51653251 and 4361615 instructions left on core 0
+DEBUG:root:Time: 2022-11-17 19:26:35.849380Current Cycle: 60289305 and 4251907 instructions left on core 0
+DEBUG:root:Time: 2022-11-17 19:26:59.743408Current Cycle: 68909964 and 4142145 instructions left on core 0
+DEBUG:root:Time: 2022-11-17 19:27:22.779587Current Cycle: 77564590 and 4032161 instructions left on core 0
+DEBUG:root:Time: 2022-11-17 19:27:42.182908Current Cycle: 86209291 and 3922303 instructions left on core 0
+DEBUG:root:Time: 2022-11-17 19:28:04.137916Current Cycle: 94821707 and 3811931 instructions left on core 0
+DEBUG:root:Time: 2022-11-17 19:28:24.804420Current Cycle: 103430143 and 3702199 instructions left on core 0
+DEBUG:root:Time: 2022-11-17 19:28:44.245892Current Cycle: 112054231 and 3592625 instructions left on core 0
+DEBUG:root:Time: 2022-11-17 19:29:04.838475Current Cycle: 120717423 and 3482563 instructions left on core 0
+DEBUG:root:Time: 2022-11-17 19:29:24.525238Current Cycle: 129351821 and 3372841 instructions left on core 0
+DEBUG:root:Time: 2022-11-17 19:29:44.404722Current Cycle: 137968048 and 3262977 instructions left on core 0
+DEBUG:root:Time: 2022-11-17 19:30:04.676490Current Cycle: 146613711 and 3153075 instructions left on core 0
+DEBUG:root:Time: 2022-11-17 19:30:25.415460Current Cycle: 155285059 and 3043053 instructions left on core 0
+DEBUG:root:Time: 2022-11-17 19:30:44.780381Current Cycle: 163916464 and 2933483 instructions left on core 0
+DEBUG:root:Time: 2022-11-17 19:31:04.404836Current Cycle: 172555819 and 2823711 instructions left on core 0
+DEBUG:root:Time: 2022-11-17 19:31:23.577085Current Cycle: 181204042 and 2713811 instructions left on core 0
+DEBUG:root:Time: 2022-11-17 19:31:43.878544Current Cycle: 189851308 and 2603881 instructions left on core 0
+DEBUG:root:Time: 2022-11-17 19:32:03.251982Current Cycle: 198471862 and 2494009 instructions left on core 0
+DEBUG:root:Time: 2022-11-17 19:32:22.559693Current Cycle: 207058970 and 2384255 instructions left on core 0
+DEBUG:root:Time: 2022-11-17 19:32:42.529900Current Cycle: 215662743 and 2274767 instructions left on core 0
+DEBUG:root:Time: 2022-11-17 19:33:01.641226Current Cycle: 224323836 and 2164703 instructions left on core 0
+DEBUG:root:Time: 2022-11-17 19:33:20.921670Current Cycle: 232943657 and 2055275 instructions left on core 0
+DEBUG:root:Time: 2022-11-17 19:33:40.357970Current Cycle: 241590141 and 1945277 instructions left on core 0
+DEBUG:root:Time: 2022-11-17 19:33:59.762994Current Cycle: 250222685 and 1835549 instructions left on core 0
+DEBUG:root:Time: 2022-11-17 19:34:19.079036Current Cycle: 258856819 and 1725879 instructions left on core 0
+DEBUG:root:Time: 2022-11-17 19:34:38.258683Current Cycle: 267512982 and 1616071 instructions left on core 0
+DEBUG:root:Time: 2022-11-17 19:34:57.944370Current Cycle: 276163183 and 1506133 instructions left on core 0
+DEBUG:root:Time: 2022-11-17 19:35:17.163449Current Cycle: 284787429 and 1396345 instructions left on core 0
+DEBUG:root:Time: 2022-11-17 19:35:36.303820Current Cycle: 293435365 and 1286469 instructions left on core 0
+DEBUG:root:Time: 2022-11-17 19:35:55.788485Current Cycle: 302078662 and 1176543 instructions left on core 0
+DEBUG:root:Time: 2022-11-17 19:36:15.179714Current Cycle: 310703771 and 1066223 instructions left on core 0
+DEBUG:root:Time: 2022-11-17 19:36:34.347052Current Cycle: 319315597 and 956577 instructions left on core 0
+DEBUG:root:Time: 2022-11-17 19:36:53.518679Current Cycle: 327955355 and 846770 instructions left on core 0
+DEBUG:root:Time: 2022-11-17 19:37:12.601434Current Cycle: 336580313 and 737259 instructions left on core 0
+DEBUG:root:Time: 2022-11-17 19:37:31.759273Current Cycle: 345225315 and 627351 instructions left on core 0
+DEBUG:root:Time: 2022-11-17 19:37:50.892867Current Cycle: 353880736 and 517235 instructions left on core 0
+DEBUG:root:Time: 2022-11-17 19:38:10.234701Current Cycle: 362488756 and 407637 instructions left on core 0
