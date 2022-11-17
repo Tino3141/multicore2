@@ -25,6 +25,23 @@ class Core:
         self.private_access = 0
         self.check_flush = check_flush
         self.flush_directory = flush_directory
+        self.loading = False
+        self.storing = False
+        self.load_store_to_main = 0
+    
+    # Returns true if we ask for the first time if an instruction is loading from main cache
+    def isLoadingFirstTime(self):
+        if self.cache.wait_counter >= 0 and not self.loading:
+            self.loading = True
+            return True
+        return False
+
+
+    def isStoringFirstTime(self):
+        if self.wait_counter >= 0 and not self.storing:
+            self.storing = True
+            return True
+        return False
     
     def add_wait(self, wait_time):
         self.wait_counter += wait_time

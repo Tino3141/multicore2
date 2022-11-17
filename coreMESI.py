@@ -56,6 +56,8 @@ class CoreMESI(Core):
             if addr in self.bus_read_input.keys():             
                 del self.bus_read_input[addr]
 
+            if self.isLoadingFirstTime():
+                self.load_store_to_main += 1
             self.cache_idle_count += 1
             if (self.cache.update_cache(addr)):
                 self.cache_idle_count -= 1  # in case of the cache is done fetching or it is a cache hit, cache is not ideling
@@ -68,6 +70,7 @@ class CoreMESI(Core):
                     self.private_access += 1
                 self.cache.update_state(addr, MESI_ACTIONS.PrRd, someone_has_copy=someone_has_copy)
                 self.instr_stream.popleft()
+                self.loading = False
                 self.load_store_instr_count += 1
         # Instr Write Case
         elif instr_type == 1:
@@ -112,9 +115,10 @@ class CoreMESI(Core):
                 self.compute_cycle_count += cycles
                 self.dec_wait()
         elif instr_type == 3:
-            self.cache.wait_counter = -1
+            # self.cache.wait_counter = -1
             if self.wait_counter < 0:
                 self.wait_counter = -1
+                self.load_store_to_main += 1
                 self.add_wait(FLUSH_TIME) # Addr adds wait time for type 2 instructions (naming issue)
             elif self.wait_counter > 0:
                 self.dec_wait()

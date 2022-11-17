@@ -77,6 +77,8 @@ class CoreMOESI(Core):
                 del self.bus_read_input[addr]
 
             self.cache_idle_count += 1
+            if self.isLoadingFirstTime():
+                self.load_store_to_main += 1
             if (self.cache.update_cache(addr)):
                 self.cache_idle_count -= 1  # in case of the cache is done fetching or it is a cache hit, cache is not ideling
                 
@@ -88,9 +90,12 @@ class CoreMOESI(Core):
                     self.private_access += 1
                 self.cache.update_state(addr, MOESI_ACTIONS.PrRd, someone_has_copy=someone_has_copy)
                 self.instr_stream.popleft()
+                # Reset loading status, next load from main memory will be counted as new load
+                self.loading = False
                 self.load_store_instr_count += 1
         # Instr Write Case
         elif instr_type == 1: 
+            
             if self.cache.update_cache(addr):
                 # access analysis
                 access_state = self.cache.get_state(addr)
@@ -102,6 +107,7 @@ class CoreMOESI(Core):
                 if bus_mesi_action != MOESI_ACTIONS.No_Action:
                     bus_output.append(BusProtocolInput(bus_mesi_action, self.core_id, addr))
                 self.instr_stream.popleft()
+                
                 self.load_store_instr_count += 1
         elif instr_type == 2:
             if self.wait_counter < 0:
@@ -116,12 +122,14 @@ class CoreMOESI(Core):
         elif instr_type == 3:
             if self.wait_counter < 0:
                 self.wait_counter = -1
+                self.load_store_to_main += 1
                 self.add_wait(FLUSH_TIME) # Addr adds wait time for type 2 instructions (naming issue)
             elif self.wait_counter > 0:
                 self.dec_wait()
             if self.wait_counter == 0: # Counter is 0 i.e. continue
                 self.instr_stream.popleft()
                 flush_addr, mesi_action = self.flush_queue.popleft()
+                self.storing = False
                 self.dec_wait()           
                 self.cache.update_state(flush_addr, mesi_action)
         else:

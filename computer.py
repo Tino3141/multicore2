@@ -107,7 +107,7 @@ class Computer:
             logging.info(f"Core {core.core_id} compute cycles: {core.compute_cycle_count}")
         
         for core in self.cores:
-            logging.info(f"Core {core.core_id} load/store count: {core.load_store_instr_count}")
+            logging.info(f"Core {core.core_id} load/store count: {core.load_store_to_main}")
         
         for core in self.cores:
             logging.info(f"Core {core.core_id} idle cycle count: {core.cache_idle_count}")
