@@ -75,8 +75,10 @@ class Computer:
                 self.current_cycle += min_wait_time
                 #print(f"Jump: {min_wait_time}")
                 for core in self.cores:
-                    core.wait_counter -= min_wait_time
-                    core.cache.wait_counter -= min_wait_time
+                    if core.wait_counter > -1:
+                        core.wait_counter -= min_wait_time
+                    if core.cache.wait_counter > -1:
+                        core.cache.wait_counter -= min_wait_time
                     core.cycle_count += min_wait_time - 1
             else:
                 #print("No jump")

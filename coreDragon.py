@@ -71,9 +71,9 @@ class CoreDragon(Core):
                             bus_output.append(BusProtocolInput(DRAGON_ACTIONS.BusRd, self.core_id, addr))
                             self.bus_read_input[addr] = True
                         return bus_output
-                    # Moved that here
-                    if addr in self.bus_read_input.keys():
-                        del self.bus_read_input[addr]
+                # Moved that here
+                if addr in self.bus_read_input.keys():
+                    del self.bus_read_input[addr]
 
                 access_state = self.cache.get_state(addr)
                 if access_state == DRAGON_STATES.SharedClean or access_state == DRAGON_STATES.SharedModified:
@@ -112,16 +112,18 @@ class CoreDragon(Core):
             #         bus_output.append(BusProtocolInput(DRAGON_ACTIONS.BusUpd, self.core_id, addr))
             #         return bus_output
             if self.cache.update_cache(addr):
+                access_state = self.cache.get_state(addr)
 
                 other_cores = self.check_state(addr, self.core_id)
                 someone_has_copy = False
                 for _, state in other_cores:
                     if state != DRAGON_STATES.Invalid:
                         someone_has_copy = True
-                    if addr not in self.bus_read_input.keys():
-                        bus_output.append(BusProtocolInput(DRAGON_ACTIONS.BusRd, self.core_id, addr))
-                        self.bus_read_input[addr] = True
-                        return bus_output
+                    if access_state == DRAGON_STATES.Loaded:
+                        if addr not in self.bus_read_input.keys():
+                            bus_output.append(BusProtocolInput(DRAGON_ACTIONS.BusRd, self.core_id, addr))
+                            self.bus_read_input[addr] = True
+                            return bus_output
                     if state == DRAGON_STATES.Exclusive or state == DRAGON_STATES.Modified:
                         return bus_output
                 
@@ -132,12 +134,11 @@ class CoreDragon(Core):
                         self.bus_read_input[addr] = True
                         bus_output.append(BusProtocolInput(DRAGON_ACTIONS.BusUpd, self.core_id, addr))
                         return bus_output
-                    # access analysis
-                    access_state = self.cache.get_state(addr)
-                    if access_state == DRAGON_STATES.SharedClean or access_state == DRAGON_STATES.SharedModified:
-                        self.shared_access += 1
-                    elif access_state == DRAGON_STATES.Exclusive or access_state == DRAGON_STATES.Modified:
-                        self.private_access += 1
+                # access analysis
+                if access_state == DRAGON_STATES.SharedClean or access_state == DRAGON_STATES.SharedModified:
+                    self.shared_access += 1
+                elif access_state == DRAGON_STATES.Exclusive or access_state == DRAGON_STATES.Modified:
+                    self.private_access += 1
                 
                 # Moved that here
                 if addr in self.bus_read_input.keys():
